@@ -30,3 +30,8 @@ class TagFuncs:
         cursor = connection.cursor()
         CQLstring = "SELECT * FROM last_created_tags LIMIT {};".format(limit)
         return list(cursor.execute(CQLstring))
+
+    def getTagsByUserIdAndBody(userId, body):
+        cursor = connection.cursor()
+        CQLstring = "SELECT * FROM tag WHERE userId = {} AND body = {} ALLOW FILTERING;".format(userId, body)
+        return list(cursor.execute(CQLstring))

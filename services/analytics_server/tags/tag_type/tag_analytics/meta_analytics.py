@@ -42,7 +42,6 @@ class QueryAnalytics:
                     tag['count'] = counts[idx]
                     results.append(tag)
 
-        print("FINALLY",results)
         return results[0:limit]
 
 
@@ -73,8 +72,9 @@ class QueryAnalytics:
     def getTopLatestTags(self, userId, limit):
         user_tags = tf.getTagsByUserId(userId)
         sort_array, counts, idx = self.parseAndSort([tag['body'] for tag in user_tags])
-        results = [tag for tag in user_tags if tag['body'] in sort_array]
-        return self.sortByDate(results, limit)
+        return_v = []
+        [[return_v.append(val) for val in tf.getTagsByUserIdAndBody(userId,self.encoder.cql_encode_all_types(tag))] for tag in sort_array[0:limit]]
+        return self.sortByDate(return_v, len(return_v))
 
     def getTopNewestTags(self, limit):
         newest_tags = tf.getAllTags()

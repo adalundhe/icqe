@@ -22,9 +22,9 @@ const AnalyticsStyle = {
     }
   },
   analyticsBlock: {
-    marginLeft: "21%",
-    marginRight: "21%",
-    width: "58%",
+    marginLeft: "10%",
+    marginRight: "10%",
+    width: "80%",
     paddingBottom: "2em",
     marginBottom: "2em",
     borderBottom: "solid",
@@ -33,4 +33,10 @@ const AnalyticsStyle = {
   }
 }
 
-export {AnalyticsStyle}
+const ChartStyles = {
+  topUserTags: {
+    fontFamilt: 'sans-serif'
+  }
+}
+
+export {AnalyticsStyle, ChartStyles}
