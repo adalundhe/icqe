@@ -23,7 +23,7 @@ class TopUserTagsChart extends Component{
             <Label value="Frequency" angle={-90} offset={-25} position="left" style={{fontSize: '1em', letterSpacing: '0.1em', textTransform: 'lowercase', color: 'rgba(0,0,0,0.3)', fontFamily: 'sans-serif'}} />
           </YAxis>
           <Tooltip />
-          <Bar dataKey="count" fill="#59ABE3" />
+          <Bar dataKey="count" fill="#59ABE3" barSize={50} />
         </BarChart>
         :
         null

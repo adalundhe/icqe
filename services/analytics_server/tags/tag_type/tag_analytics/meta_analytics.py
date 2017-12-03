@@ -44,6 +44,21 @@ class QueryAnalytics:
 
         return results[0:limit]
 
+    def getEachDate(self, tags, userId):
+        results = []
+        for tag in tags:
+            count = 1
+            encoded_body = self.encoder.cql_encode_all_types(tag['body'])
+            found = tf.getTagsByUserIdAndBody(userId, encoded_body)
+
+            for tag in found:
+                tag['count'] = count
+                count += 1
+
+            results +=  found
+
+        return results
+
 
     def parseAndSort(self, search_results):
         values, counts = np.unique(np.asarray(search_results), return_counts=True)
@@ -72,12 +87,10 @@ class QueryAnalytics:
     def getTopLatestTags(self, userId, limit):
         user_tags = tf.getTagsByUserId(userId)
         sort_array, counts, idx = self.parseAndSort([tag['body'] for tag in user_tags])
-        return_v = []
-        [[return_v.append(val) for val in tf.getTagsByUserIdAndBody(userId,self.encoder.cql_encode_all_types(tag))] for tag in sort_array[0:limit]]
-        return self.sortByDate(return_v, len(return_v))
+        return self.sortByDate(self.append_to(user_tags, sort_array, counts, None), limit)
 
     def getTopNewestTags(self, limit):
         newest_tags = tf.getAllTags()
         sort_array, counts,idx = self.parseAndSort([tag['body'] for tag in newest_tags])
-        results = [tag for tag in user_tags if tag['body'] in sort_array]
+        results = [tag for tag in newest_tags if tag['body'] in sort_array]
         return self.sortByDate(self.uniquify(results), limit)

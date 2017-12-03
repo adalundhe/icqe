@@ -14,7 +14,8 @@ class AskContainer extends Component{
     data: {},
     showData: false,
     status: 'loading',
-    loaded: false
+    loaded: false,
+    showAsk: true
   }
   componentDidMount = () => this.setState({loaded: true})
 
@@ -38,17 +39,27 @@ class AskContainer extends Component{
     data.response[index].showAnalytics = !data.response[index].showAnalytics
     this.setState({data})
   }
+  selectAnalytics = () => {
+    this.setState({showAsk: !this.state.showAsk})
+  }
   render(){
     return(
       <div>
-        <AnalyticsContainer user={this.props.user} />
-        <Ask onTextChange={this.onTextChange} submitQuestion={this.submitQuestion} status={this.props.status}/>
-        <div>
-        {this.state.showData ? <ResponseList {...this.state.data} analyticsSelect={this.analyticsSelect} />
+        <AnalyticsContainer user={this.props.user} selectAnalytics={this.selectAnalytics} />
+        {
+          this.state.showAsk ?
+          <div>
+            <Ask onTextChange={this.onTextChange} submitQuestion={this.submitQuestion} status={this.props.status}/>
+            <div>
+            {this.state.showData ? <ResponseList {...this.state.data} analyticsSelect={this.analyticsSelect} />
+              :
+              null
+            }
+            </div>
+          </div>
           :
           null
         }
-        </div>
       </div>
     )
   }

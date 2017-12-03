@@ -30,7 +30,23 @@ const AnalyticsStyle = {
     borderBottom: "solid",
     borderWidth: "thin",
     borderColor: "rgba(0,0,0,0.2)",
+  },
+  showAnalyticsRow: {
+    marginLeft: "22%",
+    marginRight: "22%",
+    width: "66%",
+    color: 'rgba(0,0,0,0.6)',
+    fontSize: '0.8em',
+    letterSpacing: '0.1em',
+    fontFamily: 'sans-serif',
+    textTransform: 'lowercase',
+    fontSize: '0.8em',
+    cursor: 'pointer'
+  },
+  listingBlock: {
+    color: 'rgba(0,0,0,0.5)'
   }
+
 }
 
 const ChartStyles = {

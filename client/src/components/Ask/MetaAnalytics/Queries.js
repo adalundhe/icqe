@@ -20,7 +20,9 @@ const topTagsByTimeQuery = gql`
       userid
       questionid
       body
+      count
       created
+      dates
     }
   }
 `
@@ -37,8 +39,8 @@ const tagsByUserTimeQuery = gql`
 `
 
 const topNewestTagsQuery = gql`
-  query topTagsByTime($limit: Int!){
-    topTagsByTime(limit: $limit){
+  query topNewestTags($limit: Int!){
+    topNewestTags(limit: $limit){
       tagid
       userid
       questionid

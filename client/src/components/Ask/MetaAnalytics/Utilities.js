@@ -24,7 +24,7 @@ const topTagsByTime = (context, limit) => {
   })
     .then(response => {
       const data = response.data.topTagsByTime
-      context.setState({topTagsByTime: data})
+      context.setState({topTagsByTime: data, loaded: true})
     })
 }
 
@@ -47,8 +47,10 @@ const topNewestTags = (context, limit) => {
   })
     .then(response =>{
       const data = response.data.topNewestTags
-      console.log(data)
+      console.log("GOT",data)
+      context.setState({topNewestTags: data, loaded: true})
     })
 }
+
 
 export {topUserTags, topTagsByTime, tagsByUserTime, topNewestTags}

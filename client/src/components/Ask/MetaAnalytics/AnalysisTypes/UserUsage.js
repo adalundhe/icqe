@@ -15,16 +15,17 @@ class UserUsageContainer extends Component{
   componentDidMount = () => {
     topUserTags(this,10)
     topTagsByTime(this, 10)
-    this.setState({loaded: true})
   }
   render(){
     return(
       <div style={AnalyticsStyle.analyticsBlock}>
-      {
+      { this.state.loaded ?
         <div>
           <TopUserTagsChart topUserTags={this.state.topUserTags} />
           <RecentUserTagsChart topTagsByTime={this.state.topTagsByTime} />
         </div>
+        :
+        null
       }
       </div>
     )

@@ -13,8 +13,15 @@ class TagType(graphene.ObjectType):
 
         try:
             self.count = tag['count']
+
         except Exception as e:
-            self.count = 0 
+            self.count = 0
+
+
+        try:
+            self.dates = tag['dates']
+        except Exception as e:
+            self.dates = []
 
 
     body = graphene.String(required=True)
@@ -24,3 +31,4 @@ class TagType(graphene.ObjectType):
     created = datetime.DateTime(required=True)
     modified = datetime.DateTime(required=True)
     count = graphene.Int(required=False)
+    dates = graphene.List(datetime.DateTime, required=False)
