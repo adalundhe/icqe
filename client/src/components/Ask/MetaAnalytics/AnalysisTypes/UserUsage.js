@@ -10,7 +10,8 @@ class UserUsageContainer extends Component{
   state = {
     topUserTags: [],
     topTagsByTime: [],
-    loaded: false
+    loaded: false,
+    range: 0
   }
   componentDidMount = () => {
     topUserTags(this,10)
@@ -20,9 +21,13 @@ class UserUsageContainer extends Component{
     return(
       <div style={AnalyticsStyle.analyticsBlock}>
       { this.state.loaded ?
-        <div>
-          <TopUserTagsChart topUserTags={this.state.topUserTags} />
-          <RecentUserTagsChart topTagsByTime={this.state.topTagsByTime} />
+        <div >
+          <div style={{borderBottom: 'solid', borderWidth: 'thin', borderColor: 'rgba(0,0,0,0.3)'}}>
+            <TopUserTagsChart topUserTags={this.state.topUserTags} range={this.state.range} />
+          </div>
+          <div>
+            <RecentUserTagsChart topTagsByTime={this.state.topTagsByTime} range={this.state.range}/>
+          </div>
         </div>
         :
         null

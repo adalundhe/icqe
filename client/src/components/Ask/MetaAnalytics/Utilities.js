@@ -9,7 +9,8 @@ const topUserTags = (context, limit) => {
   })
     .then(response => {
       const data = response.data.topUserTags
-      context.setState({topUserTags: data})
+      const range = response.data.topUserTags[0]['count']
+      context.setState({topUserTags: data, range: range})
     })
     .catch(err => console.log(err))
 }
@@ -24,8 +25,15 @@ const topTagsByTime = (context, limit) => {
   })
     .then(response => {
       const data = response.data.topTagsByTime
-      context.setState({topTagsByTime: data, loaded: true})
+      const parsed_dates = data.map(item => {
+        const newData = {}
+        Object.assign(newData, item)
+        newData['created'] = new Date(item['created']).toLocaleDateString()
+        return newData
+      })
+      context.setState({topTagsByTime: parsed_dates, loaded: true})
     })
+    .catch(err => console.log(err))
 }
 
 const tagsByUserTime = (context, query, limit) => {

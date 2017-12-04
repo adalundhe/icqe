@@ -27,6 +27,7 @@ const AnalyticsStyle = {
     width: "80%",
     paddingBottom: "2em",
     marginBottom: "2em",
+    borderTop: "solid",
     borderBottom: "solid",
     borderWidth: "thin",
     borderColor: "rgba(0,0,0,0.2)",

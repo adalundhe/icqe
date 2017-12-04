@@ -87,10 +87,10 @@ class QueryAnalytics:
     def getTopLatestTags(self, userId, limit):
         user_tags = tf.getTagsByUserId(userId)
         sort_array, counts, idx = self.parseAndSort([tag['body'] for tag in user_tags])
-        return self.sortByDate(self.append_to(user_tags, sort_array, counts, None), limit)
+        return self.sortByDate(self.append_to(user_tags, sort_array, counts, None), limit)[::-1]
 
     def getTopNewestTags(self, limit):
         newest_tags = tf.getAllTags()
         sort_array, counts,idx = self.parseAndSort([tag['body'] for tag in newest_tags])
         results = [tag for tag in newest_tags if tag['body'] in sort_array]
-        return self.sortByDate(self.uniquify(results), limit)
+        return self.sortByDate(self.uniquify(results), limit)[::-1]

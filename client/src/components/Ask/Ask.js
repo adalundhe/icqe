@@ -2,7 +2,7 @@ import React from 'react'
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {style, textStyle, inputContainer, inputStyle} from './LocalStyles/AskStyles'
-
+import {TransitionComponent} from '../Helpers/TransitionHoc'
 
 const Ask = (props) => {
   return(
@@ -44,4 +44,4 @@ const Ask = (props) => {
   )
 }
 
-export default Ask
+export default TransitionComponent(Ask)
