@@ -1,4 +1,6 @@
 import {topUserTagsQuery, topTagsByTimeQuery, tagsByUserTimeQuery, topNewestTagsQuery} from './Queries'
+import {QuestionMutation} from '../Queries'
+import {filterSortMap, calcFrequency} from '../Utilities'
 
 const topUserTags = (context, limit) => {
   const userId = context.props.user.userId
@@ -32,6 +34,7 @@ const topTagsByTime = (context, limit) => {
         return newData
       })
       context.setState({topTagsByTime: parsed_dates, loaded: true})
+      relevantQuestions(context, context.state.topUserTags.map(item => item['body']))
     })
     .catch(err => console.log(err))
 }
@@ -55,10 +58,25 @@ const topNewestTags = (context, limit) => {
   })
     .then(response =>{
       const data = response.data.topNewestTags
-      console.log("GOT",data)
       context.setState({topNewestTags: data, loaded: true})
     })
 }
 
+const relevantQuestions = (context, querySequence) => {
 
-export {topUserTags, topTagsByTime, tagsByUserTime, topNewestTags}
+  const query = querySequence.join(" ")
+  console.log(querySequence)
+  context.props.client.mutate({
+    mutation: QuestionMutation,
+    variables: {query}
+  })
+  .then(response => {
+    const data = response.data.submitQuestion
+    const results = filterSortMap(data.response).slice(0,3)
+    context.setState({relevantQuestions: results, questionsLoaded: true})
+  })
+
+}
+
+
+export {topUserTags, topTagsByTime, relevantQuestions, tagsByUserTime, topNewestTags}

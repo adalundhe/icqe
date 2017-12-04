@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {TransitionComponent} from '../../Helpers/TransitionHoc'
 import {DefaultInterface} from '../../../Utilities'
 import NavBar from './AnalyticsNavigation/NavBarContainer'
-import {Switch} from 'react-router-dom'
+import {Switch, Link} from 'react-router-dom'
 import {PrivateRoute} from '../../../Auth/PrivateRoute'
 import {UserUsage, CommunityUsage} from './AnalysisTypes'
 import {AnalyticsStyle} from '../LocalStyles/AnalyticsStyles'
@@ -27,8 +27,12 @@ class AnalyticsContainer extends Component{
       <div style={AnalyticsStyle.container}>
         <Row style={AnalyticsStyle.showAnalyticsRow}>
           <Col md={1} onClick={() => this.setVisibility()}>
-            <Icon name="gear" style={{marginRight: '1em'}} />
-            View analytics
+            <Link to="/ask/my-usage" style={{textDecoration: 'none', color: 'rgba(0,0,0,0.5)'}}>
+              <Icon name="gear" style={{marginRight: '1em'}} />
+              {
+                this.state.showAnalytics ? 'Collapse analytics' : 'View analytics'
+              }
+            </Link>
           </Col>
           <Col md={11}>
           </Col>

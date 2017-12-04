@@ -2,15 +2,18 @@ import React, {Component} from 'react'
 import {TransitionComponent} from '../../../Helpers/TransitionHoc'
 import {AnalyticsStyle} from '../../LocalStyles/AnalyticsStyles'
 import {withApollo } from 'react-apollo'
-import {topUserTags, topTagsByTime} from '../Utilities'
+import {topUserTags, topTagsByTime, relevantQuestions} from '../Utilities'
 import TopUserTagsChart from './UserAnalyticsVisualizations/TopUserTagsChart'
 import RecentUserTagsChart from './UserAnalyticsVisualizations/RecentUserTagsChart'
+import {RelevantQuestionsList, LoadingQuestions} from './GeneralAnalytics'
 
 class UserUsageContainer extends Component{
   state = {
     topUserTags: [],
     topTagsByTime: [],
+    relevantQuestions: [],
     loaded: false,
+    questionsLoaded: false,
     range: 0
   }
   componentDidMount = () => {
@@ -22,10 +25,20 @@ class UserUsageContainer extends Component{
       <div style={AnalyticsStyle.analyticsBlock}>
       { this.state.loaded ?
         <div >
-          <div style={{borderBottom: 'solid', borderWidth: 'thin', borderColor: 'rgba(0,0,0,0.3)'}}>
+          <div style={{borderBottom: 'solid', borderWidth: 'thin', borderColor: 'rgba(0,0,0,0.3)', display: 'flex'}}>
             <TopUserTagsChart topUserTags={this.state.topUserTags} range={this.state.range} />
+            {
+              this.state.questionsLoaded ?
+              <div  style={{marginTop: '2em', marginBottom: '3em'}}>
+                <RelevantQuestionsList relevantQuestions={this.state.relevantQuestions} />
+              </div>
+              :
+              <div style={{textAlign: 'center', width: '50%', textAlign: 'center', marginTop: '12em'}}>
+                <LoadingQuestions />
+              </div>
+            }
           </div>
-          <div>
+          <div >
             <RecentUserTagsChart topTagsByTime={this.state.topTagsByTime} range={this.state.range}/>
           </div>
         </div>

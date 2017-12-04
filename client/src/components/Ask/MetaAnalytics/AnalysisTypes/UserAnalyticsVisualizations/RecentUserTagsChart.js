@@ -23,7 +23,7 @@ class RecentUserTagsChart extends Component{
   }
   render(){
     return(
-      <div>
+      <div style={{marginTop: '4em'}}>
       <p style={{fontFamily: 'sans-serif', fontSize: '1.2em', color: 'rgba(0,0,0,0.5)', letterSpacing: '0.1em', textTransform: 'lowercase', marginLeft: '3.25em', marginBottom: '0'}}>tag usage by time</p>
       {
         this.state.loaded ?
