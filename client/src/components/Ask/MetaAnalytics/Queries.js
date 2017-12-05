@@ -50,4 +50,18 @@ const topNewestTagsQuery = gql`
     }
   }
 `
-export {topUserTagsQuery, topTagsByTimeQuery, tagsByUserTimeQuery, topNewestTagsQuery}
+
+const topCommunityTagsQuery = gql`
+  query topCommunityTags($limit: Int!){
+    topCommunityTags(limit: $limit){
+      tagid
+      userid
+      questionid
+      body
+      count
+      created
+    }
+  }
+`
+
+export {topUserTagsQuery, topTagsByTimeQuery, tagsByUserTimeQuery, topNewestTagsQuery, topCommunityTagsQuery}

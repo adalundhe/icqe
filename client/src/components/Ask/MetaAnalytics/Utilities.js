@@ -1,4 +1,4 @@
-import {topUserTagsQuery, topTagsByTimeQuery, tagsByUserTimeQuery, topNewestTagsQuery} from './Queries'
+import {topUserTagsQuery, topTagsByTimeQuery, tagsByUserTimeQuery, topNewestTagsQuery, topCommunityTagsQuery} from './Queries'
 import {QuestionMutation} from '../Queries'
 import {filterSortMap, calcFrequency} from '../Utilities'
 
@@ -78,5 +78,17 @@ const relevantQuestions = (context, querySequence) => {
 
 }
 
+const topCommunityTags = (context, limit) => {
+  context.props.client.query({
+    query: topCommunityTagsQuery,
+    variables: {limit}
+  })
+  .then(response => {
+    const data = response.data.topCommunityTags
+    const results = filterSortMap(data.response)
+    context.setState({topCommunityTags: results})
+  })
+}
 
-export {topUserTags, topTagsByTime, relevantQuestions, tagsByUserTime, topNewestTags}
+
+export {topUserTags, topTagsByTime, relevantQuestions, tagsByUserTime, topNewestTags, topCommunityTags}

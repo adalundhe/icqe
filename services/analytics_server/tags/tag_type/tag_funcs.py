@@ -35,3 +35,13 @@ class TagFuncs:
         cursor = connection.cursor()
         CQLstring = "SELECT * FROM tag WHERE userId = {} AND body = {} ALLOW FILTERING;".format(userId, body)
         return list(cursor.execute(CQLstring))
+
+    def getTopNTags(n):
+        cursor = connection.cursor()
+        CQLstring = "SELECT * FROM popular_tags WHERE count > {} ALLOW FILTERING;".format(n)
+        return list(cursor.execute(CQLstring))
+
+    def getTagsAfterDate(date):
+        cursor = connection.cursor()
+        CQLstring = "SELECT * FROM tag WHERE created > {} ALLOW FILTERING;".format(date)
+        return list(cursor.execute(CQLstring))

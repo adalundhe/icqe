@@ -52,6 +52,11 @@ class TagQuery(graphene.ObjectType):
         limit = graphene.Int()
     )
 
+    top_community_tags = graphene.List(
+        TagType,
+        limit = graphene.Int()
+    )
+
     def resolve_tags_all(self, type):
         return [TagType(tag) for tag in  tf.getAllTags()]
 
@@ -82,3 +87,7 @@ class TagQuery(graphene.ObjectType):
     def resolve_top_newest_tags(self, type, limit):
         result = SERVICE.getTopNewestTags(limit)
         return [TagType(tag) for tag in result]
+
+    def resolve_top_community_tags(self, type, limit):
+        result = SERVICE.getTopCommunityTags(limit)
+        return[TagType(tag) for tag in result]

@@ -3,8 +3,7 @@ import {TransitionComponent} from '../../../Helpers/TransitionHoc'
 import {AnalyticsStyle} from '../../LocalStyles/AnalyticsStyles'
 import {withApollo } from 'react-apollo'
 import {topUserTags, topTagsByTime, relevantQuestions} from '../Utilities'
-import TopUserTagsChart from './UserAnalyticsVisualizations/TopUserTagsChart'
-import RecentUserTagsChart from './UserAnalyticsVisualizations/RecentUserTagsChart'
+import {TopUserTagsChart, RecentUserTagsChart} from './UserAnalyticsVisualizations'
 import {RelevantQuestionsList, LoadingQuestions} from './GeneralAnalytics'
 
 class UserUsageContainer extends Component{
