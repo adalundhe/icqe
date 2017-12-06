@@ -65,7 +65,6 @@ const topNewestTags = (context, limit) => {
         const newData = {}
         Object.assign(newData, item)
         newData['created'] = new Date(item['created']).toLocaleDateString()
-        newData['count'] = Math.log2(newData['count'])
         return newData
       })
       context.setState({topNewestTags: parsed_dates, loaded: true})
