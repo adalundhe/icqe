@@ -6,10 +6,9 @@ import {DefaultInterface} from '../../../Utilities'
 const topUserTags = (context, limit) => {
   DefaultInterface.setInterface('http://localhost:3000/user-profile/meta')
   const userId = context.props.user.userId
-  const tempUserId = "2f541769-1b7a-454f-a351-ed36ac672b26"
   context.props.client.query({
     query: topUserTagsQuery,
-    variables: {userid: tempUserId, limit: limit}
+    variables: {userid: userId, limit: limit}
   })
     .then(response => {
       const data = response.data.topUserTags
@@ -22,11 +21,10 @@ const topUserTags = (context, limit) => {
 const topTagsByTime = (context, limit) => {
   DefaultInterface.setInterface('http://localhost:3000/user-profile/meta')
   const userId = context.props.user.userId
-  const tempUserId = "2f541769-1b7a-454f-a351-ed36ac672b26"
 
   context.props.client.query({
     query: topTagsByTimeQuery,
-    variables: {userid: tempUserId, limit}
+    variables: {userid: userId, limit}
   })
     .then(response => {
       const data = response.data.topTagsByTime

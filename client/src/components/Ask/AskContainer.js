@@ -41,7 +41,7 @@ class AskContainer extends Component{
             console.log("Data",data)
             this.props.AddNewTagsMutation({variables: {tags: tags, questionid: data.QuestionId, userid: data.UserId}})
               .then(response => {
-                console.log(response.data)
+                this.forceUpdate()
               })
               .catch(err => console.log(err))
           })

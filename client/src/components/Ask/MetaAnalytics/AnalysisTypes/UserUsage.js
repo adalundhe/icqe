@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {TransitionComponent} from '../../../Helpers/TransitionHoc'
 import {AnalyticsStyle} from '../../LocalStyles/AnalyticsStyles'
 import {withApollo } from 'react-apollo'
-import {topUserTags, topTagsByTime, relevantQuestions} from '../Utilities'
+import {topUserTags, topTagsByTime} from '../Utilities'
 import {TopUserTagsChart, RecentUserTagsChart} from './UserAnalyticsVisualizations'
 import {RelevantQuestionsList, LoadingQuestions} from './GeneralAnalytics'
 
