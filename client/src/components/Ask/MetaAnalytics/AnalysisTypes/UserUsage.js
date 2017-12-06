@@ -5,6 +5,8 @@ import {withApollo } from 'react-apollo'
 import {topUserTags, topTagsByTime} from '../Utilities'
 import {TopUserTagsChart, RecentUserTagsChart} from './UserAnalyticsVisualizations'
 import {RelevantQuestionsList, LoadingQuestions} from './GeneralAnalytics'
+import {Col, Row} from 'react-bootstrap'
+import {Icon} from 'react-fa'
 
 class UserUsageContainer extends Component{
   state = {
@@ -16,6 +18,10 @@ class UserUsageContainer extends Component{
     range: 0
   }
   componentDidMount = () => {
+    this.loadData()
+  }
+  loadData = () => {
+    this.setState({loaded: false, questionsLoaded: false})
     topUserTags(this,10)
     topTagsByTime(this, 10)
   }
@@ -24,6 +30,23 @@ class UserUsageContainer extends Component{
       <div style={AnalyticsStyle.analyticsBlock}>
       { this.state.loaded ?
         <div >
+          <Row style={{marginTop: "1em", fontSize: '0.6em', color: "rgba(0,0,0,0.6)", fontFamily: "sans-serif", textTransform: "lowercase", cursor: "pointer", letterSpacing: "0.1em"}}>
+            <Col md={1} onClick={() => this.loadData()} >
+              {
+                this.state.questionsLoaded ?
+                <div>
+                  <Icon name="refresh" style={{marginRight: '1em'}} />
+                  Refresh
+                </div>
+                :
+                <div>
+                  <Icon name="spinner" style={{marginRight: '1em'}} />
+                  Loading
+                </div>
+              }
+
+            </Col>
+          </Row>
           <div style={{borderBottom: 'solid', borderWidth: 'thin', borderColor: 'rgba(0,0,0,0.3)', display: 'flex'}}>
             <TopUserTagsChart topUserTags={this.state.topUserTags} range={this.state.range} />
             {
