@@ -2,6 +2,7 @@ package tag
 
 import (
   "fmt"
+  "time"
   "log"
   "github.com/gocql/gocql"
   "github.com/graphql-go/graphql"
@@ -59,10 +60,50 @@ func AddNewTag(args graphql.ResolveParams)(interface{}, error){
             newId, newBody, questionId, userId).Exec();
 
   err != nil {
-		log.Fatal(err)
+		return Tag{}, err
 	}
 
 	return  newTag, nil
+}
+
+func AddNewTags(args graphql.ResolveParams)(interface{}, error){
+  tagsList := args.Args["Tags"].([]interface{})
+  questionId, _ := gocql.ParseUUID(args.Args["QuestionId"].(string))
+  userId, _ := gocql.ParseUUID(args.Args["UserId"].(string))
+
+  var newTags []Tag
+
+  session, err := cassandra.GetCass()
+	if err != nil{
+		panic(err)
+	}
+  defer session.Close()
+
+  for _, tag := range tagsList {
+    newId := gocql.TimeUUID()
+    newBody := tag.(string)
+
+    insertTime := time.Now()
+
+    newTag := Tag{
+      TagId: newId,
+      Body: newBody,
+      QuestionId: questionId,
+      UserId: userId,
+    }
+
+    if err := session.Query(`INSERT INTO graphql.tag (tagId, body, questionId, userId, created, modified) VALUES (?, ?, ?, ?, ?, ?)`,
+              newId, newBody, questionId, userId, insertTime, insertTime).Exec();
+
+    err != nil {
+  		return Tag{}, err
+  	}
+
+    newTags = append(newTags, newTag)
+
+  }
+
+  return newTags, nil
 }
 
 func GetTagsByQuestionId(questionId gocql.UUID)([]Tag, error){

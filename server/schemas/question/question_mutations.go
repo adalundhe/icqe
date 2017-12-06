@@ -16,6 +16,9 @@ var addNewQuestion = graphql.NewObject(graphql.ObjectConfig{
         "UserId": &graphql.ArgumentConfig{
           Type: graphql.NewNonNull(graphql.ID),
         },
+				"AnswerId": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.ID),
+				},
       },
       Resolve: func(p graphql.ResolveParams)(interface{}, error){
           question, err := AddNewQuestion(p)

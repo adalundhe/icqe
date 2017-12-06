@@ -2,6 +2,7 @@ package question
 
 import (
   "log"
+  "time"
   "github.com/gocql/gocql"
   "github.com/graphql-go/graphql"
 	"github.com/scorbettUM/server/app/cassandra"
@@ -34,14 +35,18 @@ func GetAll()([]Question, error){
 }
 
 func AddNewQuestion(args graphql.ResolveParams)(interface{}, error){
+
   newId := gocql.TimeUUID()
   userId, _ := gocql.ParseUUID(args.Args["UserId"].(string))
   newQuestionBody := args.Args["Body"].(string)
+  answerId, _ := args.Args["AnswerId"].(string)
+  insertTime := time.Now()
 
   newQuestion := &Question{
     QuestionId: newId,
     Body: newQuestionBody,
     UserId: userId,
+    AnswerId: answerId,
   }
 
   session, err := cassandra.GetCass()
@@ -50,11 +55,12 @@ func AddNewQuestion(args graphql.ResolveParams)(interface{}, error){
 	}
   defer session.Close()
 
-  if err := session.Query(`INSERT INTO graphql.question (questionId, body, userId) VALUES (?, ?, ?)`,
-		        newId, newQuestionBody, userId).Exec();
+
+  if err := session.Query(`INSERT INTO graphql.question (questionId, body, userId, answerId, created, modified) VALUES (?, ?, ?, ?, ?, ?)`,
+		        newId, newQuestionBody, userId, answerId, insertTime, insertTime).Exec();
 
   err != nil {
-		log.Fatal(err)
+		return Question{}, err
 	}
 
 	return newQuestion, nil

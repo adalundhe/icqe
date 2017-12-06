@@ -6,4 +6,5 @@ SERVICE = QueryAnalytics()
 INITCOUNTDB = InitTopTags()
 
 
-SERVICE.init_thresh = INITCOUNTDB.calcInitThresh()
+SERVICE.init_thresh = INITCOUNTDB.calcInitThresh()['count']
+print("INIT THRESH",SERVICE.init_thresh)

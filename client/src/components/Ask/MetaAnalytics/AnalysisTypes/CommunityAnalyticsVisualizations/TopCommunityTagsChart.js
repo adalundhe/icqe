@@ -9,6 +9,7 @@ class TopCommunityTagsChart extends Component{
   }
   componentDidMount = () => {
     this.setState({loaded: true})
+    console.log("PROPS",this.props)
   }
   render(){
     return(

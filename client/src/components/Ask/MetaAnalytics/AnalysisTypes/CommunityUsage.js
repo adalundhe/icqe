@@ -25,7 +25,7 @@ class CommunityUsageContianer extends Component{
       { this.state.loaded ?
         <div >
           <div style={{borderBottom: 'solid', borderWidth: 'thin', borderColor: 'rgba(0,0,0,0.3)', display: 'flex'}}>
-            <TopCommunityTagsChart topUserTags={this.state.topCommunityTags} range={this.state.range} />
+            <TopCommunityTagsChart topCommunityTags={this.state.topCommunityTags} range={this.state.range} />
             {
               this.state.questionsLoaded ?
               <div  style={{marginTop: '2em', marginBottom: '3em'}}>

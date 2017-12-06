@@ -79,6 +79,5 @@ class TagRecommender():
         return {'responses': results, 'response-time': (end-start), 'response-length': len(results)}
 
     def ask_question(self, question):
-        print("INCOMING QUESTIONS:",question)
         queries = self.tokenizer.tokenize(question)
         return self.tags_to_questions(queries)

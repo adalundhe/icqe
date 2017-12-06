@@ -50,7 +50,7 @@ class CustomRecommender:
 
         for question in filtered_questions:
             body = Counter(self.tokenizer.tokenize(question['body']))
-            cos_sim.append({'similarity': self.get_cosine(question_asked, body), 'body': question['body'], 'linkto': question['url']})
+            cos_sim.append({'similarity': self.get_cosine(question_asked, body), 'body': question['body'], 'linkto': question['url'], 'questionid': question['questionid'], 'userid': question['userid'], 'answerid': question['answerid']})
 
         return sorted(cos_sim, key=lambda x: x['similarity'])[::-1]
 

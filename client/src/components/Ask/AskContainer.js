@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import {withRouter} from 'react-router-dom'
-import {filterSortMap, calcFrequency} from './Utilities'
+import {filterSortMap, calcFrequency, cleanWords} from './Utilities'
 import {DefaultInterface} from '../../Utilities'
-import {QuestionMutation} from './Queries'
+import {QuestionMutation, AddNewQuestionMutation, AddNewTagsMutation} from './Queries'
 import Ask from './Ask'
 import ResponseList from './ResponseList'
 import AnalyticsContainer from './MetaAnalytics/AnalyticsContainer'
@@ -26,12 +26,26 @@ class AskContainer extends Component{
     event.preventDefault()
     DefaultInterface.setInterface('http://localhost:3000/user-profile/ask')
     const query = this.state.question
-    this.props.mutate({variables: {query}})
+    this.props.QuestionMutation({variables: {query}})
       .then((response) => {
+        DefaultInterface.setInterface('http://localhost:3000/user-profile/questionql')
         const data = response.data.submitQuestion
         data.response = filterSortMap(data.response)
         data.similarities = calcFrequency(filterSortMap(data.response, 'similarity'))
         this.setState({data: data, showData: true, status: 'ready', question: ''})
+        this.props.AddNewQuestionMutation({variables: {body: query, userid: this.props.user.userId, answerid: data.response[0].answerid}})
+          .then(response => {
+            DefaultInterface.setInterface('http://localhost:3000/user-profile/tagql')
+            const data = response.data.AddNewQuestion.Question
+            const tags = cleanWords(data.Body).split(" ").filter(item => item !== " ")
+            console.log("Data",data)
+            this.props.AddNewTagsMutation({variables: {tags: tags, questionid: data.QuestionId, userid: data.UserId}})
+              .then(response => {
+                console.log(response.data)
+              })
+              .catch(err => console.log(err))
+          })
+          .catch(err => console.log(err))
       })
   }
   analyticsSelect = (index) => {
@@ -65,4 +79,10 @@ class AskContainer extends Component{
   }
 }
 
-export default graphql(QuestionMutation)(withRouter(AskContainer))
+const AskContainerComponent= compose(
+  graphql(QuestionMutation, {name: "QuestionMutation"}),
+  graphql(AddNewQuestionMutation, {name: "AddNewQuestionMutation"}),
+  graphql(AddNewTagsMutation, {name: "AddNewTagsMutation"})
+)(withRouter(AskContainer))
+
+export default AskContainerComponent

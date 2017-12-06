@@ -9,6 +9,7 @@ type Question struct {
   Body string `json:"body"`
 	UserId gocql.UUID `json:"userId"`
 	QuestionId gocql.UUID `json:"questionId"`
+	AnswerId string `json:"answerId"`
 }
 
 var QuestionType = graphql.NewObject(graphql.ObjectConfig{
@@ -26,6 +27,10 @@ var QuestionType = graphql.NewObject(graphql.ObjectConfig{
 		"QuestionId": &graphql.Field{
 			Type: graphql.NewNonNull(graphql.ID),
 			Description: "Unique identifier for question.",
+		},
+		"AnswerId": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.ID),
+			Description: "Identifier for top answer to question",
 		},
   },
 })

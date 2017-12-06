@@ -34,7 +34,7 @@ class QueryAnalytics:
                 results.append(tag)
                 unique_tags.append(tag['body'])
 
-        print(len(unique_tags))
+        print("UNIQUE",len(unique_tags))
         return results
 
     def append_to(self,tags,sort_by,counts, limit=None):
@@ -101,10 +101,12 @@ class QueryAnalytics:
 
     def getTopCommunityTags(self, limit):
         init_limit = self.init_thresh
+        print("PASSING",init_limit,type(init_limit))
         all_tags = tf.getTopNTags(init_limit)
         query_limit = limit**2
         query_size = len(all_tags)
         while(query_size > query_limit):
+            print("PASSING",init_limit,type(init_limit))
             init_limit += query_limit
             all_tags = tf.getTopNTags(init_limit)
             query_size = len(all_tags)

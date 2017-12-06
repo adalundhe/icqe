@@ -29,6 +29,31 @@ var addNewTag = graphql.NewObject(graphql.ObjectConfig{
 	},
 })
 
+var addNewTags = graphql.NewObject(graphql.ObjectConfig{
+	Name: "AddNewTags",
+	Description: "Add new tags.",
+	Fields: graphql.Fields{
+		"Tags": &graphql.Field{
+			Type: graphql.NewList(TagType),
+			Args: graphql.FieldConfigArgument{
+				"Tags": &graphql.ArgumentConfig{
+					Type: graphql.NewList(graphql.String),
+				},
+				"QuestionId": & graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.ID),
+				},
+				"UserId": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.ID),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams)(interface{}, error){
+				newTags, err := AddNewTags(p)
+				return newTags, err
+			},
+		},
+	},
+})
+
 
 var RootTagMutation = graphql.NewObject(graphql.ObjectConfig{
 	Name: "RootTagMutation",
@@ -38,6 +63,13 @@ var RootTagMutation = graphql.NewObject(graphql.ObjectConfig{
 			Resolve: func(p graphql.ResolveParams)(interface{}, error){
 				var errorNew error
 				return  Tag{}, errorNew
+			},
+		},
+		"AddNewTags": &graphql.Field{
+			Type: addNewTags,
+			Resolve: func(p graphql.ResolveParams)(interface{}, error){
+				var errorNew error
+				return []Tag{}, errorNew
 			},
 		},
 	},

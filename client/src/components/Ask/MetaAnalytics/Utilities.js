@@ -1,8 +1,10 @@
 import {topUserTagsQuery, topTagsByTimeQuery, tagsByUserTimeQuery, topNewestTagsQuery, topCommunityTagsQuery} from './Queries'
 import {QuestionMutation} from '../Queries'
 import {filterSortMap, calcFrequency} from '../Utilities'
+import {DefaultInterface} from '../../../Utilities'
 
 const topUserTags = (context, limit) => {
+  DefaultInterface.setInterface('http://localhost:3000/user-profile/meta')
   const userId = context.props.user.userId
   const tempUserId = "2f541769-1b7a-454f-a351-ed36ac672b26"
   context.props.client.query({
@@ -18,6 +20,7 @@ const topUserTags = (context, limit) => {
 }
 
 const topTagsByTime = (context, limit) => {
+  DefaultInterface.setInterface('http://localhost:3000/user-profile/meta')
   const userId = context.props.user.userId
   const tempUserId = "2f541769-1b7a-454f-a351-ed36ac672b26"
 
@@ -40,6 +43,7 @@ const topTagsByTime = (context, limit) => {
 }
 
 const tagsByUserTime = (context, query, limit) => {
+  DefaultInterface.setInterface('http://localhost:3000/user-profile/meta')
   context.props.client.query({
     query: tagsByUserTimeQuery,
     variables: {query, userid: context.props.user.userId, limit}
@@ -51,6 +55,7 @@ const tagsByUserTime = (context, query, limit) => {
 }
 
 const topNewestTags = (context, limit) => {
+  DefaultInterface.setInterface('http://localhost:3000/user-profile/meta')
   // WARNING: This is an expensive query
   context.props.client.query({
     query: topNewestTagsQuery,
@@ -58,14 +63,21 @@ const topNewestTags = (context, limit) => {
   })
     .then(response =>{
       const data = response.data.topNewestTags
-      context.setState({topNewestTags: data, loaded: true})
+      const parsed_dates = data.map(item => {
+        const newData = {}
+        Object.assign(newData, item)
+        newData['created'] = new Date(item['created']).toLocaleDateString()
+        newData['count'] = Math.log2(newData['count'])
+        return newData
+      })
+      context.setState({topNewestTags: parsed_dates, loaded: true})
+      relevantQuestions(context, context.state.topNewestTags.map(item => item['body']))
     })
 }
 
 const relevantQuestions = (context, querySequence) => {
 
   const query = querySequence.join(" ")
-  console.log(querySequence)
   context.props.client.mutate({
     mutation: QuestionMutation,
     variables: {query}
@@ -79,15 +91,18 @@ const relevantQuestions = (context, querySequence) => {
 }
 
 const topCommunityTags = (context, limit) => {
+  console.log("LIMIT",limit,typeof limit)
+  DefaultInterface.setInterface('http://localhost:3000/user-profile/meta')
   context.props.client.query({
     query: topCommunityTagsQuery,
     variables: {limit}
   })
   .then(response => {
     const data = response.data.topCommunityTags
-    const results = filterSortMap(data.response)
-    context.setState({topCommunityTags: results})
+    const range = response.data.topCommunityTags[0]['count']
+    context.setState({topCommunityTags: data, range: range})
   })
+  .catch(err => console.log(err))
 }
 
 
