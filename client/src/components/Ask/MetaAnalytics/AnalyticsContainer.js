@@ -27,7 +27,7 @@ class AnalyticsContainer extends Component{
       <div style={AnalyticsStyle.container}>
         <Row style={AnalyticsStyle.showAnalyticsRow}>
           <Col md={1} onClick={() => this.setVisibility()}>
-            <Link to="/ask/my-usage" style={{textDecoration: 'none', color: 'rgba(0,0,0,0.5)'}}>
+            <Link to="ask/my-usage" style={{textDecoration: 'none', color: 'rgba(0,0,0,0.5)'}}>
               <Icon name="gear" style={{marginRight: '1em'}} />
               {
                 this.state.showAnalytics ? 'Collapse analytics' : 'View analytics'
@@ -43,8 +43,8 @@ class AnalyticsContainer extends Component{
               <div>
                 <NavBar/>
                 <Switch>
-                  <PrivateRoute path="/ask/my-usage" user={this.props.user} component={UserUsage} />
-                  <PrivateRoute path="/ask/community-usage" component={CommunityUsage} />
+                  <PrivateRoute path="ask/my-usage" user={this.props.user} component={UserUsage} />
+                  <PrivateRoute path="ask/community-usage" component={CommunityUsage} />
                 </Switch>
               </div>
               :
