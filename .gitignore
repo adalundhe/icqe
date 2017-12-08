@@ -1,0 +1,3 @@
+open.sh
+services/analytics_server/analytics_server/*.csv
+services/analytics_server/analytics_server/*.zip
