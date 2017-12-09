@@ -15,6 +15,7 @@ class Callback extends Component {
       getUserInfo(this)
     }
     catch(e){
+      console.log("ERR",e)
       logout()
     }
     this.props.history.push("/")
