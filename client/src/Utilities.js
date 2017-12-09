@@ -38,6 +38,6 @@ const ClientInterface = {
   }
 }
 
-const DefaultInterface = ClientInterface.newClient('http://bsca.ddns.net/user-profile/userql')
+const DefaultInterface = ClientInterface.newClient('http://'+process.env.REACT_APP_CALLBACK+'/user-profile/userql')
 
 export {createClient, ClientInterface, DefaultInterface, getUserInfo}

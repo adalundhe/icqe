@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://bsca.ddns.net",
+  "proxy": "http://192.168.1.3",
   "dependencies": {
     "apollo-link": "^1.0.3",
     "apollo-link-http": "^1.2.0",
