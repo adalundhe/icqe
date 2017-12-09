@@ -6,7 +6,7 @@ const ACCESS_TOKEN_KEY = 'access_token';
 
 const CLIENT_ID = 'Md7aXt2b2amERmGkshrJ4eLygthnVAMn';
 const CLIENT_DOMAIN = 'stackbotp.auth0.com';
-const REDIRECT = 'http://bsca.ddns.net/callback';
+const REDIRECT = 'http://'+process.env.REACT_APP_CALLBACK+'/callback';
 const SCOPE = 'openid profile read:messages';
 const AUDIENCE = 'go-icql';
 
