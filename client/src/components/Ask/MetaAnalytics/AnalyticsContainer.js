@@ -27,12 +27,22 @@ class AnalyticsContainer extends Component{
       <div style={AnalyticsStyle.container}>
         <Row style={AnalyticsStyle.showAnalyticsRow}>
           <Col md={1} onClick={() => this.setVisibility()}>
-            <Link to="ask/my-usage" style={{textDecoration: 'none', color: 'rgba(0,0,0,0.5)'}}>
+          {
+            this.state.showAnalytics ?
+            <Link to="/ask" style={{textDecoration: 'none', color: 'rgba(0,0,0,0.5)'}}>
               <Icon name="gear" style={{marginRight: '1em'}} />
               {
-                this.state.showAnalytics ? 'Collapse analytics' : 'View analytics'
+                'Collapse analytics'
               }
             </Link>
+            :
+            <Link to="/ask/my-usage" style={{textDecoration: 'none', color: 'rgba(0,0,0,0.5)'}}>
+              <Icon name="gear" style={{marginRight: '1em'}} />
+              {
+                'View analytics'
+              }
+            </Link>
+          }
           </Col>
           <Col md={11}>
           </Col>
