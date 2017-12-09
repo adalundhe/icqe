@@ -11,7 +11,7 @@ class Callback extends Component {
     try{
       setAccessToken();
       setIdToken();
-      DefaultInterface.setInterface('http://192.168.1.2:3000/user-profile/userql')
+      DefaultInterface.setInterface('http://bsca.ddns.net/user-profile/userql')
       getUserInfo(this)
     }
     catch(e){

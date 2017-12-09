@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://192.168.1.2:3000",
+  "proxy": "http://bsca.ddns.net",
   "dependencies": {
     "apollo-link": "^1.0.3",
     "apollo-link-http": "^1.2.0",
@@ -32,7 +32,7 @@
     "d3-svg-legend": "^2.24.1",
     "d3-transition": "^1.1.0",
     "delta-state": "^0.4.0",
-    "dotenv": "4.0.0",
+    "dotenv": "^4.0.0",
     "eslint": "4.4.1",
     "eslint-config-react-app": "^2.0.0",
     "eslint-loader": "1.9.0",

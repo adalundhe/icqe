@@ -28,7 +28,7 @@ const getUserInfo = (context) => {
 }
 
 const getUserAddress = (context, userId) => {
-  DefaultInterface.setInterface('http://192.168.1.2/user-profile/addressql')
+  DefaultInterface.setInterface('http://bsca.ddns.net/user-profile/addressql')
   context.props.client.query({
     query: getUserAddressQuery,
     variables: {userId: userId}

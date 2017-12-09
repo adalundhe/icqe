@@ -91,7 +91,7 @@ const SubmitUser = (context, userData, submitAddress) => {
 
 const SubmitAddress = (context, userId) => {
   const address = context.state.profileData.address
-  DefaultInterface.setInterface('http://192.168.1.2.:3000/user-profile/addressql')
+  DefaultInterface.setInterface('http://bsca.ddns.net/user-profile/addressql')
 
   context.props.mutateAddress({variables: {userid: userId, ...address}})
     .then((response) => {
@@ -131,7 +131,7 @@ const EditUser = (context, userData, submitAddress) => {
 
 const EditAddress = (context, userId) => {
   const address = context.state.profileData.address
-  DefaultInterface.setInterface('http://192.168.1.2.:3000/user-profile/addressql')
+  DefaultInterface.setInterface('http://bsca.ddns.net/user-profile/addressql')
 
   context.props.mutateExistingAddress({variables: {addressid: context.state.id.addressId, userid: userId, ...address}})
     .then((response) => {
@@ -148,7 +148,7 @@ const EditAddress = (context, userId) => {
 
 const submitData = (context, submitAddress) => {
   const data = context.state.profileData
-  DefaultInterface.setInterface('http://192.168.1.2.:3000/user-profile/userql')
+  DefaultInterface.setInterface('http://bsca.ddns.net/user-profile/userql')
   if(!context.state.id.userId.length > 0 && preSubmitValidate(context, data, 'user')){
 
     SubmitUser(context, data.user, submitAddress)

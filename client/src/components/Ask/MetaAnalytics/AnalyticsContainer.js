@@ -15,7 +15,7 @@ class AnalyticsContainer extends Component{
     showAnalytics: false,
   }
   componentDidMount = () => {
-    DefaultInterface.setInterface('http://192.168.1.2.:3000/user-profile/meta')
+    DefaultInterface.setInterface('http://bsca.ddns.net/user-profile/meta')
 
   }
   setVisibility = () => {
