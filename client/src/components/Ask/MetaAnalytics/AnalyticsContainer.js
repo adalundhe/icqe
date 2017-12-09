@@ -43,8 +43,8 @@ class AnalyticsContainer extends Component{
               <div>
                 <NavBar/>
                 <Switch>
-                  <PrivateRoute path="ask/my-usage" user={this.props.user} component={UserUsage} />
-                  <PrivateRoute path="ask/community-usage" component={CommunityUsage} />
+                  <PrivateRoute path="/ask/my-usage" user={this.props.user} component={UserUsage} />
+                  <PrivateRoute path="/ask/community-usage" component={CommunityUsage} />
                 </Switch>
               </div>
               :

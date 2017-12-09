@@ -11,6 +11,7 @@ class Callback extends Component {
     try{
       setAccessToken();
       setIdToken();
+      console.log("Hitting!",process.env.REACT_APP_API)
       DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/userql')
       getUserInfo(this)
     }

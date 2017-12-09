@@ -44,10 +44,10 @@ class App extends Component {
             <NavBar />
             <Switch>
               <Route exact path="/" component={Home} />
-              <PrivateRoute path="ask" user={this.state.user} component={Ask} />
-              <PrivateRoute path="user-profile" loaded={this.state.loaded} setUser={this.setUser} setAddress={this.setAddress}  component={UserProfile}/>
-              <PrivateRoute path="logout" render={() => <Logout />} />
-              <Route path="callback" render={() => <Callback setUser={this.setUser} setAddress={this.setAddress} />} />
+              <PrivateRoute path="/ask" user={this.state.user} component={Ask} />
+              <PrivateRoute path="/user-profile" loaded={this.state.loaded} setUser={this.setUser} setAddress={this.setAddress}  component={UserProfile}/>
+              <PrivateRoute path="/logout" render={() => <Logout />} />
+              <Route path="/callback" render={() => <Callback setUser={this.setUser} setAddress={this.setAddress} />} />
             </Switch>
           </div>
         </Router>
