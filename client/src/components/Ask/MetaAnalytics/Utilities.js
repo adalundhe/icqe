@@ -4,7 +4,7 @@ import {filterSortMap, calcFrequency} from '../Utilities'
 import {DefaultInterface} from '../../../Utilities'
 
 const topUserTags = (context, limit) => {
-  DefaultInterface.setInterface('http://'+process.env.REACT_APP_CALLBACK+'/user-profile/meta')
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   const userId = context.props.user.userId
   context.props.client.query({
     query: topUserTagsQuery,
@@ -19,7 +19,7 @@ const topUserTags = (context, limit) => {
 }
 
 const topTagsByTime = (context, limit) => {
-  DefaultInterface.setInterface('http://'+process.env.REACT_APP_CALLBACK+'/user-profile/meta')
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   const userId = context.props.user.userId
 
   context.props.client.query({
@@ -41,7 +41,7 @@ const topTagsByTime = (context, limit) => {
 }
 
 const tagsByUserTime = (context, query, limit) => {
-  DefaultInterface.setInterface('http://'+process.env.REACT_APP_CALLBACK+'/user-profile/meta')
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   context.props.client.query({
     query: tagsByUserTimeQuery,
     variables: {query, userid: context.props.user.userId, limit}
@@ -53,7 +53,7 @@ const tagsByUserTime = (context, query, limit) => {
 }
 
 const topNewestTags = (context, limit) => {
-  DefaultInterface.setInterface('http://'+process.env.REACT_APP_CALLBACK+'/user-profile/meta')
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   // WARNING: This is an expensive query
   context.props.client.query({
     query: topNewestTagsQuery,
@@ -89,7 +89,7 @@ const relevantQuestions = (context, querySequence) => {
 
 const topCommunityTags = (context, limit) => {
   console.log("LIMIT",limit,typeof limit)
-  DefaultInterface.setInterface('http://'+process.env.REACT_APP_CALLBACK+'/user-profile/meta')
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   context.props.client.query({
     query: topCommunityTagsQuery,
     variables: {limit}

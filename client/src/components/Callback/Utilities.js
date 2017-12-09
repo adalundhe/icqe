@@ -28,7 +28,7 @@ const getUserInfo = (context) => {
 }
 
 const getUserAddress = (context, userId) => {
-  DefaultInterface.setInterface('http://'+process.env.REACT_APP_CALLBACK+'/user-profile/addressql')
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/addressql')
   context.props.client.query({
     query: getUserAddressQuery,
     variables: {userId: userId}

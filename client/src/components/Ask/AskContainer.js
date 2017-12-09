@@ -24,18 +24,18 @@ class AskContainer extends Component{
   }
   submitQuestion = (event) => {
     event.preventDefault()
-    DefaultInterface.setInterface('http://'+process.env.REACT_APP_CALLBACK+'/user-profile/ask')
+    DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/ask')
     const query = this.state.question
     this.props.QuestionMutation({variables: {query}})
       .then((response) => {
-        DefaultInterface.setInterface('http://'+process.env.REACT_APP_CALLBACK+'/user-profile/questionql')
+        DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/questionql')
         const data = response.data.submitQuestion
         data.response = filterSortMap(data.response)
         data.similarities = calcFrequency(filterSortMap(data.response, 'similarity'))
         this.setState({data: data, showData: true, status: 'ready', question: ''})
         this.props.AddNewQuestionMutation({variables: {body: query, userid: this.props.user.userId, answerid: data.response[0].answerid}})
           .then(response => {
-            DefaultInterface.setInterface('http://'+process.env.REACT_APP_CALLBACK+'/user-profile/tagql')
+            DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/tagql')
             const data = response.data.AddNewQuestion.Question
             const tags = cleanWords(data.Body).split(" ").filter(item => item !== "")
             console.log("Data",tags,data)
