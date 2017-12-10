@@ -12,7 +12,7 @@ class UserUsageContainer extends Component{
   state = {
     topUserTags: [],
     topTagsByTime: [],
-    relevantQuestions: [],
+    relevantQuestions: undefined,
     loaded: false,
     questionsLoaded: false,
     range: 0
@@ -47,11 +47,13 @@ class UserUsageContainer extends Component{
 
             </Col>
           </Row>
-          <div style={{borderBottom: 'solid', borderWidth: 'thin', borderColor: 'rgba(0,0,0,0.3)', display: 'flex'}}>
-            <TopUserTagsChart topUserTags={this.state.topUserTags} range={this.state.range} />
+          <div style={{borderBottom: 'solid', borderWidth: 'thin', borderColor: 'rgba(0,0,0,0.3)', display: 'flex', justifyContent: 'space-around'}}>
+            <div style={{marginTop: '2em', width: '50%'}}>
+              <TopUserTagsChart topUserTags={this.state.topUserTags} range={this.state.range} />
+            </div>
             {
               this.state.questionsLoaded ?
-              <div  style={{marginTop: '2em', marginBottom: '3em'}}>
+              <div  style={{marginTop: '2em', marginBottom: '3em', width: '50%'}}>
                 <RelevantQuestionsList relevantQuestions={this.state.relevantQuestions} />
               </div>
               :

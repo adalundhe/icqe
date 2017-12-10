@@ -24,7 +24,7 @@ const topTagsByTime = (context, limit) => {
 
   context.props.client.query({
     query: topTagsByTimeQuery,
-    variables: {userid: userId, limit}
+    variables: {userid: userId, limit: limit}
   })
     .then(response => {
       const data = response.data.topTagsByTime
@@ -44,7 +44,7 @@ const tagsByUserTime = (context, query, limit) => {
   DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   context.props.client.query({
     query: tagsByUserTimeQuery,
-    variables: {query, userid: context.props.user.userId, limit}
+    variables: {query, userid: context.props.user.userId, limit: limit}
   })
     .then(response => {
       const data = response.data.tagsByUserTime
@@ -73,7 +73,6 @@ const topNewestTags = (context, limit) => {
 }
 
 const relevantQuestions = (context, querySequence) => {
-
   const query = querySequence.join(" ")
   context.props.client.mutate({
     mutation: QuestionMutation,
