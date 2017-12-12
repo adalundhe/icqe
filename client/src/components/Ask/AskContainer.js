@@ -38,7 +38,6 @@ class AskContainer extends Component{
             DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/tagql')
             const data = response.data.AddNewQuestion.Question
             const tags = cleanWords(data.Body).split(" ").filter(item => item !== "")
-            console.log("Data",tags,data)
             this.props.AddNewTagsMutation({variables: {tags: tags, questionid: data.QuestionId, userid: data.UserId}})
               .then(response => {
                 this.forceUpdate()

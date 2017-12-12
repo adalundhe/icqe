@@ -14,6 +14,7 @@ const topUserTags = (context, limit) => {
       const data = response.data.topUserTags
       const range = response.data.topUserTags[0]['count']
       context.setState({topUserTags: data, range: range})
+      relevantQuestions(context, data.map(item => item['body']))
     })
     .catch(err => console.log(err))
 }
@@ -35,7 +36,6 @@ const topTagsByTime = (context, limit) => {
         return newData
       })
       context.setState({topTagsByTime: parsed_dates, loaded: true})
-      relevantQuestions(context, context.state.topUserTags.map(item => item['body']))
     })
     .catch(err => console.log(err))
 }
@@ -48,8 +48,8 @@ const tagsByUserTime = (context, query, limit) => {
   })
     .then(response => {
       const data = response.data.tagsByUserTime
-      console.log(data)
     })
+    .catch(err => console.log(err))
 }
 
 const topNewestTags = (context, limit) => {
@@ -68,7 +68,6 @@ const topNewestTags = (context, limit) => {
         return newData
       })
       context.setState({topNewestTags: parsed_dates, loaded: true})
-      relevantQuestions(context, context.state.topNewestTags.map(item => item['body']))
     })
 }
 
@@ -87,7 +86,6 @@ const relevantQuestions = (context, querySequence) => {
 }
 
 const topCommunityTags = (context, limit) => {
-  console.log("LIMIT",limit,typeof limit)
   DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   context.props.client.query({
     query: topCommunityTagsQuery,
@@ -97,6 +95,7 @@ const topCommunityTags = (context, limit) => {
     const data = response.data.topCommunityTags
     const range = response.data.topCommunityTags[0]['count']
     context.setState({topCommunityTags: data, range: range})
+    relevantQuestions(context, data.map(item => item['body']))
   })
   .catch(err => console.log(err))
 }
