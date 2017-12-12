@@ -15,10 +15,8 @@ class TagFuncs:
         return list(cursor.execute(CQLstring))
 
     def getTagsByUserId(userId):
-        print("GOT", userId)
         cursor = connection.cursor()
         CQLstring = "SELECT * FROM tag WHERE userId = {} ALLOW FILTERING;".format(userId)
-        print(CQLstring)
         return list(cursor.execute(CQLstring))
 
     def getTagByUserId(tagId, userId):
