@@ -28,9 +28,7 @@ const Response = (props) => {
       </Row>
       {
       props.showAnalytics ?
-      <Row style={rowStyle}>
-        <Col md={1} style={colItem}>
-        </Col>
+      <Row style={{...rowStyle, display: 'flex', justifyContent: 'space-around', marginLeft: '10%'}}>
         <Col md={6}>
           <Frequency similarities={props.similarities} responseSimilarity={props.similarity.toFixed(3)} />
         </Col>
