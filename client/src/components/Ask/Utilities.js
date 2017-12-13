@@ -23,6 +23,7 @@ const askQuestion = (context, query) => {
         })
         .catch(err => console.log(err))
     })
+    .catch(err => console.log(err))
 }
 
 const htmlToText = (text) => {

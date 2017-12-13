@@ -28,7 +28,7 @@ class AskContainer extends Component{
     questionsLoaded: false,
     userRange: 0,
     communityRange: 0,
-    showAnalytics: false
+    showAnalytics: false,
   }
   componentDidMount = () => {
     this.setState({loaded: true})
@@ -46,8 +46,11 @@ class AskContainer extends Component{
   }
   submitQuestion = (event) => {
     event.preventDefault()
-    DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/ask')
-    askQuestion(this, this.state.question)
+    if(this.state.question.length > 0){
+      this.setState({lastQuestion: this.state.question})
+      DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/ask')
+      askQuestion(this, this.state.question)
+    }
   }
   analyticsSelect = (index) => {
     const data = this.state.data
@@ -80,7 +83,7 @@ class AskContainer extends Component{
           <div>
             <Ask onTextChange={this.onTextChange} submitQuestion={this.submitQuestion} status={this.props.status}/>
             <div>
-            {this.props.showData ? <ResponseList {...this.state.data} analyticsSelect={this.analyticsSelect} />
+            {this.state.showData ? <ResponseList {...this.state.data} analyticsSelect={this.analyticsSelect} />
               :
               null
             }
