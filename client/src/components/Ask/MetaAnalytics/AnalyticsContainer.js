@@ -12,23 +12,34 @@ import {Col, Row} from 'react-bootstrap'
 class AnalyticsContainer extends Component{
   state = {
     loaded: false,
-    showAnalytics: false,
   }
   componentDidMount = () => {
     DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
 
   }
-  setVisibility = () => {
-    this.setState({showAnalytics: !this.state.showAnalytics})
-    this.props.selectAnalytics()
-  }
   render(){
+    const userData = {
+      topUserTags: this.props.data.topUserTags,
+      topTagsByTime: this.props.data.topTagsByTime,
+      relevantUserQuestions: this.props.data.relevantUserQuestions,
+      userRange: this.props.data.userRange,
+      analyticsLoaded: this.props.data.analyticsLoaded,
+      questionsLoaded: this.props.data.questionsLoaded
+    }
+    const communityData = {
+      topCommunityTags: this.props.data.topCommunityTags,
+      topNewestTags: this.props.data.topNewestTags,
+      relevantCommunityQuestions: this.props.data.relevantCommunityQuestions,
+      communityRange: this.props.data.communityRange,
+      analyticsLoaded: this.props.data.analyticsLoaded,
+      questionsLoaded: this.props.data.questionsLoaded
+    }
     return(
       <div style={AnalyticsStyle.container}>
         <Row style={AnalyticsStyle.showAnalyticsRow}>
-          <Col md={1} onClick={() => this.setVisibility()}>
+          <Col md={1} onClick={() => this.props.selectAnalytics()}>
           {
-            this.state.showAnalytics ?
+            this.props.showAnalytics ?
             <Link to="/ask" style={{textDecoration: 'none', color: 'rgba(0,0,0,0.5)'}}>
               <Icon name="gear" style={{marginRight: '1em'}} />
               {
@@ -49,12 +60,12 @@ class AnalyticsContainer extends Component{
         </Row>
         <Row>
         {
-            this.state.showAnalytics ?
+            this.props.showAnalytics ?
               <div>
                 <NavBar/>
                 <Switch>
-                  <PrivateRoute path="/ask/my-usage" user={this.props.user} component={UserUsage} />
-                  <PrivateRoute path="/ask/community-usage" component={CommunityUsage} />
+                  <PrivateRoute path="/ask/my-usage" user={this.props.user} {...userData} loadData={this.props.loadData} component={UserUsage} />
+                  <PrivateRoute path="/ask/community-usage" {...communityData} loadData={this.props.loadData} component={CommunityUsage} />
                 </Switch>
               </div>
               :

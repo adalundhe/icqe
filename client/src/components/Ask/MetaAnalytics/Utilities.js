@@ -13,8 +13,8 @@ const topUserTags = (context, limit) => {
     .then(response => {
       const data = response.data.topUserTags
       const range = response.data.topUserTags[0]['count']
-      context.setState({topUserTags: data, range: range})
-      relevantQuestions(context, data.map(item => item['body']))
+      context.setState({topUserTags: data, userRange: range})
+      relevantQuestions(context, data.map(item => item['body']), 'user')
     })
     .catch(err => console.log(err))
 }
@@ -35,7 +35,7 @@ const topTagsByTime = (context, limit) => {
         newData['created'] = new Date(item['created']).toLocaleDateString()
         return newData
       })
-      context.setState({topTagsByTime: parsed_dates, loaded: true})
+      context.setState({topTagsByTime: parsed_dates, analyticsLoaded: true})
     })
     .catch(err => console.log(err))
 }
@@ -67,11 +67,11 @@ const topNewestTags = (context, limit) => {
         newData['created'] = new Date(item['created']).toLocaleDateString()
         return newData
       })
-      context.setState({topNewestTags: parsed_dates, loaded: true})
+      context.setState({topNewestTags: parsed_dates, analyticsLoaded: true})
     })
 }
 
-const relevantQuestions = (context, querySequence) => {
+const relevantQuestions = (context, querySequence, type) => {
   const query = querySequence.join(" ")
   context.props.client.mutate({
     mutation: QuestionMutation,
@@ -80,7 +80,14 @@ const relevantQuestions = (context, querySequence) => {
   .then(response => {
     const data = response.data.submitQuestion
     const results = filterSortMap(data.response).slice(0,3)
-    context.setState({relevantQuestions: results, questionsLoaded: true})
+
+    if(type === 'user'){
+        context.setState({relevantUserQuestions: results, questionsLoaded: true})
+    }
+    else{
+      context.setState({relevantCommunityQuestions: results, questionsLoaded: true})
+    }
+
   })
 
 }
@@ -94,8 +101,8 @@ const topCommunityTags = (context, limit) => {
   .then(response => {
     const data = response.data.topCommunityTags
     const range = response.data.topCommunityTags[0]['count']
-    context.setState({topCommunityTags: data, range: range})
-    relevantQuestions(context, data.map(item => item['body']))
+    context.setState({topCommunityTags: data, communityRange: range})
+    relevantQuestions(context, data.map(item => item['body']), 'community')
   })
   .catch(err => console.log(err))
 }

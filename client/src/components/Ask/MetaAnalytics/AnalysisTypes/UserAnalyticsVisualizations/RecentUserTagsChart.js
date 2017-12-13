@@ -11,7 +11,6 @@ class RecentUserTagsChart extends Component{
   componentDidMount = () => {
     data = this.props.topTagsByTime
     ticks = data.map((item,i) => i+1)
-    console.log(ticks)
     const coallated = data.map(item => data.filter(inner_item => inner_item['body'] === item['body']))
 
     data = Array.from(new Set(coallated.sort()

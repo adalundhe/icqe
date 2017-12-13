@@ -1,4 +1,29 @@
+import {DefaultInterface} from '../../Utilities'
+
 const parser = new DOMParser();
+
+const askQuestion = (context, query) => {
+  context.props.QuestionMutation({variables: {query}})
+    .then((response) => {
+      DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/questionql')
+      const data = response.data.submitQuestion
+      data.response = filterSortMap(data.response)
+      data.similarities = calcFrequency(filterSortMap(data.response, 'similarity'))
+      context.setState({data: data, showData: true, status: 'ready', question: ''})
+      context.props.AddNewQuestionMutation({variables: {body: query, userid: context.props.user.userId, answerid: data.response[0].answerid}})
+        .then(response => {
+          DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/tagql')
+          const data = response.data.AddNewQuestion.Question
+          const tags = cleanWords(data.Body).split(" ").filter(item => item !== "")
+          context.props.AddNewTagsMutation({variables: {tags: tags, questionid: data.QuestionId, userid: data.UserId}})
+            .then(response => {
+              context.loadData()
+            })
+            .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
+    })
+}
 
 const htmlToText = (text) => {
   const dom = parser.parseFromString(
@@ -540,4 +565,4 @@ const cleanWords = (word) => {
 }
 
 
-export {htmlToText, filterSortMap, calcFrequency, relevancyRank, cleanWords}
+export {htmlToText, filterSortMap, calcFrequency, relevancyRank, cleanWords, askQuestion}

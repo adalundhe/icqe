@@ -14,7 +14,6 @@ class NavBarContainer extends Component{
     }
   }
   setActive = (index) => {
-    console.log("ACTIVE",index)
     const activeNavItems = [0, 0, 0, 0]
     activeNavItems[index] = 1
     this.setState({isActive: activeNavItems})
