@@ -8,7 +8,7 @@ const Ask = (props) => {
   return(
     <div style={inputContainer}>
       <div style={textStyle}>
-        <p>Type your question below...</p>
+        <p>Ask your javascript coding question below...</p>
       </div>
       <div style={inputContainer}>
         <form onSubmit={(event) => props.submitQuestion(event)}>
