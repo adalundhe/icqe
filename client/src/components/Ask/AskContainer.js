@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
 import { graphql, compose } from 'react-apollo'
 import {withRouter} from 'react-router-dom'
-import {filterSortMap, calcFrequency, cleanWords} from './Utilities'
+import {filterSortMap, calcFrequency, cleanWords, askQuestion} from './Utilities'
 import {DefaultInterface} from '../../Utilities'
 import {QuestionMutation, AddNewQuestionMutation, AddNewTagsMutation} from './Queries'
+import {topUserTags, topTagsByTime, tagsByUserTime, topNewestTags, topCommunityTags} from './MetaAnalytics/Utilities'
 import Ask from './Ask'
+import {withApollo } from 'react-apollo'
 import ResponseList from './ResponseList'
 import AnalyticsContainer from './MetaAnalytics/AnalyticsContainer'
 
@@ -15,38 +17,40 @@ class AskContainer extends Component{
     showData: false,
     status: 'loading',
     loaded: false,
-    showAsk: true
+    showAsk: true,
+    topUserTags: [],
+    topTagsByTime: [],
+    relevantUserQuestions: [],
+    relevantCommunityQuestions: [],
+    topNewestTags: [],
+    topCommunityTags: [],
+    analyticsLoaded: false,
+    questionsLoaded: false,
+    userRange: 0,
+    communityRange: 0,
+    showAnalytics: false,
   }
-  componentDidMount = () => this.setState({loaded: true})
+  componentDidMount = () => {
+    this.setState({loaded: true})
+  }
 
   onTextChange = (event) => {
     this.setState({question: event.target.value, status: 'loading'})
   }
+  loadData = () => {
+    this.setState({analyticsLoaded: false, questionsLoaded: false})
+    topUserTags(this,10)
+    topTagsByTime(this, 10)
+    topCommunityTags(this, 10)
+    topNewestTags(this, 10)
+  }
   submitQuestion = (event) => {
     event.preventDefault()
-    DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/ask')
-    const query = this.state.question
-    this.props.QuestionMutation({variables: {query}})
-      .then((response) => {
-        DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/questionql')
-        const data = response.data.submitQuestion
-        data.response = filterSortMap(data.response)
-        data.similarities = calcFrequency(filterSortMap(data.response, 'similarity'))
-        this.setState({data: data, showData: true, status: 'ready', question: ''})
-        this.props.AddNewQuestionMutation({variables: {body: query, userid: this.props.user.userId, answerid: data.response[0].answerid}})
-          .then(response => {
-            DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/tagql')
-            const data = response.data.AddNewQuestion.Question
-            const tags = cleanWords(data.Body).split(" ").filter(item => item !== "")
-            console.log("Data",tags,data)
-            this.props.AddNewTagsMutation({variables: {tags: tags, questionid: data.QuestionId, userid: data.UserId}})
-              .then(response => {
-                this.forceUpdate()
-              })
-              .catch(err => console.log(err))
-          })
-          .catch(err => console.log(err))
-      })
+    if(this.state.question.length > 0){
+      this.setState({lastQuestion: this.state.question})
+      DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/ask')
+      askQuestion(this, this.state.question)
+    }
   }
   analyticsSelect = (index) => {
     const data = this.state.data
@@ -54,14 +58,28 @@ class AskContainer extends Component{
     this.setState({data})
   }
   selectAnalytics = () => {
-    this.setState({showAsk: !this.state.showAsk})
+    this.loadData()
+    this.props.setVisibility(false)
   }
   render(){
+    const data = {
+      topUserTags: this.state.topUserTags,
+      topCommunityTags: this.state.topCommunityTags,
+      topNewestTags: this.state.topNewestTags,
+      topTagsByTime: this.state.topTagsByTime,
+      relevantUserQuestions: this.state.relevantUserQuestions,
+      relevantCommunityQuestions: this.state.relevantCommunityQuestions,
+      analyticsLoaded: this.state.analyticsLoaded,
+      questionsLoaded: this.state.questionsLoaded,
+      userRange: this.state.userRange,
+      communityRange: this.state.communityRange
+    }
     return(
       <div>
-        <AnalyticsContainer user={this.props.user} selectAnalytics={this.selectAnalytics} />
+        <AnalyticsContainer user={this.props.user} selectAnalytics={this.selectAnalytics}
+        loadData={this.loadData} showAnalytics={this.props.showAnalytics} selectAnalytics={this.selectAnalytics} data={data} />
         {
-          this.state.showAsk ?
+          this.props.showAsk ?
           <div>
             <Ask onTextChange={this.onTextChange} submitQuestion={this.submitQuestion} status={this.props.status}/>
             <div>
@@ -80,6 +98,7 @@ class AskContainer extends Component{
 }
 
 const AskContainerComponent= compose(
+  withApollo,
   graphql(QuestionMutation, {name: "QuestionMutation"}),
   graphql(AddNewQuestionMutation, {name: "AddNewQuestionMutation"}),
   graphql(AddNewTagsMutation, {name: "AddNewTagsMutation"})

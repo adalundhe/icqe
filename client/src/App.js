@@ -19,13 +19,25 @@ class App extends Component {
       state: "",
       zip: ""
     },
-    loaded: false
+    loaded: false,
+    showAnalytics: false,
+    showAsk: true,
   }
   componentDidMount = () => {
     if(isLoggedIn()){
       const data = getUserInfo()
       this.setState({user: data.user, address: data.address})
+
     }
+  }
+  setVisibility = (setDefault) => {
+    if(setDefault){
+      this.setState({showAnalytics: false, showAsk: true})
+    }
+    else{
+      this.setState({showAnalytics: !this.state.showAnalytics, showAsk: !this.state.showAsk})
+    }
+
   }
   setUser = (userData) => {
     this.setState({user: userData})
@@ -41,10 +53,11 @@ class App extends Component {
       <div>
         <Router>
           <div>
-            <NavBar />
+            <NavBar setVisibility={this.setVisibility} showAsk={this.state.showAsk} />
             <Switch>
               <Route exact path="/" component={Home} />
-              <PrivateRoute path="/ask" user={this.state.user} component={Ask} />
+              <PrivateRoute path="/ask" user={this.state.user} setVisibility={this.setVisibility}
+              showAnalytics={this.state.showAnalytics} showAsk={this.state.showAsk} component={Ask} />
               <PrivateRoute path="/user-profile" loaded={this.state.loaded} setUser={this.setUser} setAddress={this.setAddress}  component={UserProfile}/>
               <PrivateRoute path="/logout" render={() => <Logout />} />
               <Route path="/callback" render={() => <Callback setUser={this.setUser} setAddress={this.setAddress} />} />

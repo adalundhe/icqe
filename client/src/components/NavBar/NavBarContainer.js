@@ -6,13 +6,14 @@ class NavBarContainer extends Component{
     isActive: [1, 0, 0, 0, 0]
   }
   componentDidMount = () => {
-    if(window.location.href.includes('/ask')){
+    if(window.location.href.indexOf('/ask') > -1){
       this.setActive(2)
+      this.props.setVisibility(true)
     }
-    else if (window.location.href.includes('/user-profile')) {
+    else if (window.location.href.indexOf('/user-profile') > -1) {
       this.setActive(3)
     }
-    else if (window.location.href.includes('/logout')) {
+    else if (window.location.href.indexOf('/logout') > -1) {
       this.setActive(4)
     }
     else{
@@ -24,6 +25,10 @@ class NavBarContainer extends Component{
     const flipActive = (activeNavItems[index]) ? 0 : 1
     const nextActive = [...activeNavItems.slice(0, index), flipActive, ...activeNavItems.slice(index+1)]
     this.setState({isActive: nextActive})
+
+    if(window.location.href.indexOf('/ask') > -1){
+      this.props.setVisibility(true)
+    }
 
   }
   render(){

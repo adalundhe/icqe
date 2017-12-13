@@ -30,7 +30,7 @@ const NavBar = (props) => {
                           <AuthItem icon="cogs"  style={NavStyle.itemGroup} target="/user-profile" action={login} text="Login/Signup"  isActive={props.isActive[1]} setActive={props.setActive} index={1}/>
                         </li> :
                         <li style={NavStyle.listItems}>
-                          <NavItem icon="code" style={NavStyle.itemGroup} target="/ask" text="Ask"  isActive={props.isActive[2]} setActive={props.setActive} index={2}/>
+                          <NavItem icon="code" style={NavStyle.itemGroup} target="/ask" text="Ask" isActive={props.isActive[2]} setActive={props.setActive} index={2}/>
                           <NavItem icon="address-book-o" style={NavStyle.itemGroup} target="/user-profile" text="Profile"  isActive={props.isActive[3]} setActive={props.setActive} index={3}/>
                           <AuthItem icon="sign-out" style={NavStyle.itemGroup} target="/" action={logout} text="Logout" isActive={props.isActive[4]} setActive={props.setActive} index={4} />
                         </li>
