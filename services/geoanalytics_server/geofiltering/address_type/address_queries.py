@@ -17,9 +17,19 @@ class AddressQuery(graphene.ObjectType):
         user_id = graphene.ID()
     )
 
+    dist_to_user = graphene.List(
+        ReturnAddressType,
+        user_id = graphene.ID(),
+        user_ids = graphene.List(graphene.ID)
+    )
+
     def resolve_address_by_id(self, type, user_id):
         return AddressType(user_id)
 
     def resolve_users_near_user(self, type, user_id):
         results = SERVICE.nearestUsers(user_id)
+        return [ReturnAddressType(result) for result in results]
+
+    def resolve_dist_to_user(self, type, user_id, user_ids):
+        results = SERVICE.distFromUsertoUsers(user_id,user_ids)
         return [ReturnAddressType(result) for result in results]

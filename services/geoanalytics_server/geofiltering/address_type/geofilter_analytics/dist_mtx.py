@@ -40,6 +40,12 @@ class DistanceMatrix:
                 results.append(item)
         return results
 
+    def set_dist(self, user_address, items):
+        for address in items:
+            address['dist'] = self.gmclient.distance_matrix(origins=self.address_str(user_address), destinations=self.address_str(address))['rows'][0]['elements'][0]
+
+        return self.strdist_to_floatdist(items)
+
 
     def nearestUsers(self,user_id):
         user_address = self.urn_uuid(af.getAddressByUserId(user_id))
@@ -49,13 +55,15 @@ class DistanceMatrix:
 
 
 
-        all_found = nearest_by_city  + nearest_by_state + nearest_by_zip
+        users_found = nearest_by_city  + nearest_by_state + nearest_by_zip
+        all_found = self.set_dist(user_address, users_found)
 
-        for address in all_found:
-            address['dist'] = self.gmclient.distance_matrix(origins=self.address_str(user_address), destinations=self.address_str(address))['rows'][0]['elements'][0]
+        return sorted(all_found, key=lambda x: x['dist'])
 
+    def distFromUsertoUsers(self, user_id, user_ids):
+        user_address = self.urn_uuid(af.getAddressByUserId(user_id))
+        users_found = [self.urn_uuid(af.getAddressByUserId(u_id)) for u_id in user_ids]
 
-
-        all_found = self.strdist_to_floatdist(all_found)
+        all_found = self.set_dist(user_address ,users_found)
 
         return sorted(all_found, key=lambda x: x['dist'])
