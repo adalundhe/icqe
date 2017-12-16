@@ -8,7 +8,7 @@ import json
 
 class AddressQuery(graphene.ObjectType):
     address_by_id = graphene.Field(
-        UserAddressType,
+        ReturnAddressType,
         user_id = graphene.ID()
     )
 

@@ -3,8 +3,8 @@ import uuid
 
 class ReturnAddressType(graphene.ObjectType):
     def __init__(self, address):
-        self.addressid = address['addressid'].urn
-        self.userId = address['userid'].urn
+        self.addressId = address['addressid']
+        self.userId = address['userid']
         self.city = address['city']
         self.state = address['state']
         self.zip_code = address['zip']

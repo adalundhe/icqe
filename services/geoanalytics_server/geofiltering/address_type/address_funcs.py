@@ -8,7 +8,7 @@ class AddressFuncs:
     def getAddressByUserId(userId):
         cursor = connection.cursor()
         CQLstring = "SELECT * FROM address WHERE userId = %s ALLOW FILTERING;" % userId
-        return dict(cursor.execute(CQLstring))
+        return list(cursor.execute(CQLstring))[0]
 
     def getAddressesByCity(city):
         cursor = connection.cursor()
