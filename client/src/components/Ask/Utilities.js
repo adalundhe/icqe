@@ -1,16 +1,30 @@
 import {DefaultInterface} from '../../Utilities'
+import {distanceToUserQuery} from './MetaAnalytics/AnalysisTypes/Geolocation/Queries'
 
 const parser = new DOMParser();
 
-const askQuestion = (context, query) => {
+const getDistances = (context, userId, userIds) => {
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/geoanalytics')
+  context.props.client.query({
+    query: distanceToUserQuery,
+    variables: {userid: userId, userids: userIds}
+  })
+    .then(response => {
+      console.log(response)
+    })
+    .catch(err => console.log(err))
+}
+
+const askQuestion = (context, query, geoanalyticsOn, distancesToUser) => {
   context.props.QuestionMutation({variables: {query}})
     .then((response) => {
       DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/questionql')
-      const data = response.data.submitQuestion
-      data.response = filterSortMap(data.response)
-      data.similarities = calcFrequency(filterSortMap(data.response, 'similarity'))
-      context.setState({data: data, showData: true, status: 'ready', question: ''})
-      context.props.AddNewQuestionMutation({variables: {body: query, userid: context.props.user.userId, answerid: data.response[0].answerid}})
+      const responseData = response.data.submitQuestion
+      responseData.response = filterSortMap(responseData.response)
+      responseData.similarities = calcFrequency(filterSortMap(responseData.response, 'similarity'))
+      context.setState({data: responseData, showData: true, status: 'ready', question: ''})
+
+      context.props.AddNewQuestionMutation({variables: {body: query, userid: context.props.user.userId, answerid: responseData.response[0].answerid}})
         .then(response => {
           DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/tagql')
           const data = response.data.AddNewQuestion.Question
@@ -18,6 +32,9 @@ const askQuestion = (context, query) => {
           context.props.AddNewTagsMutation({variables: {tags: tags, questionid: data.QuestionId, userid: data.UserId}})
             .then(response => {
               context.loadData()
+              if(geoanalyticsOn){
+                getDistances(context, context.props.user.userId, responseData.response.map(item => item['userid']))
+              }
             })
             .catch(err => console.log(err))
         })
@@ -566,4 +583,4 @@ const cleanWords = (word) => {
 }
 
 
-export {htmlToText, filterSortMap, calcFrequency, relevancyRank, cleanWords, askQuestion}
+export {htmlToText, filterSortMap, calcFrequency, relevancyRank, cleanWords, askQuestion, getDistances}

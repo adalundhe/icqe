@@ -3,7 +3,6 @@ from cassandra.cluster import Cluster
 from cassandra.encoder import Encoder
 from cassandra.query import dict_factory, ordered_dict_factory
 import collections
-import uuid
 
 
 class Provider:

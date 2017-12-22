@@ -1,6 +1,6 @@
 import React from 'react'
-import RefreshIndicator from 'material-ui/RefreshIndicator';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RefreshIndicator from 'material-ui/RefreshIndicator'
 import {style, textStyle, inputContainer, inputStyle} from './LocalStyles/AskStyles'
 import {TransitionComponent} from '../Helpers/TransitionHoc'
 
@@ -20,7 +20,7 @@ const Ask = (props) => {
               left={30}
               top={0}
               loadingColor="#3498DB"
-              status={'loading'}
+              status="loading"
               style={style.refresh}
             />
           </MuiThemeProvider> :
