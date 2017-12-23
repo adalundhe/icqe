@@ -1,22 +1,16 @@
 import {DefaultInterface} from '../../Utilities'
-import {distanceToUserQuery} from './MetaAnalytics/AnalysisTypes/Geolocation/Queries'
+import {QuestionMutation, AddNewQuestionMutation, AddNewTagsMutation, DistanceToUserQuery} from './Queries'
+import {getDistances} from './MetaAnalytics/Utilities'
 
 const parser = new DOMParser();
 
-const getDistances = (context, userId, userIds) => {
-  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/geoanalytics')
-  context.props.client.query({
-    query: distanceToUserQuery,
-    variables: {userid: userId, userids: userIds}
-  })
-    .then(response => {
-      console.log(response)
+const askQuestion = (context, query) => {
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/ask')
+  console.log("DOING",context.props)
+  context.props.client.mutate({
+      mutation: QuestionMutation,
+      variables: {query}
     })
-    .catch(err => console.log(err))
-}
-
-const askQuestion = (context, query, geoanalyticsOn, distancesToUser) => {
-  context.props.QuestionMutation({variables: {query}})
     .then((response) => {
       DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/questionql')
       const responseData = response.data.submitQuestion
@@ -24,17 +18,40 @@ const askQuestion = (context, query, geoanalyticsOn, distancesToUser) => {
       responseData.similarities = calcFrequency(filterSortMap(responseData.response, 'similarity'))
       context.setState({data: responseData, showData: true, status: 'ready', question: ''})
 
-      context.props.AddNewQuestionMutation({variables: {body: query, userid: context.props.user.userId, answerid: responseData.response[0].answerid}})
+      context.props.client.mutate({
+          mutation: AddNewQuestionMutation,
+          variables: {body: query, userid: context.props.user.userId, answerid: responseData.response[0].answerid}
+        })
         .then(response => {
           DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/tagql')
           const data = response.data.AddNewQuestion.Question
           const tags = cleanWords(data.Body).split(" ").filter(item => item !== "")
-          context.props.AddNewTagsMutation({variables: {tags: tags, questionid: data.QuestionId, userid: data.UserId}})
+          context.props.client.mutate({
+            mutation: AddNewTagsMutation,
+            variables: {tags: tags, questionid: data.QuestionId, userid: data.UserId}
+          })
             .then(response => {
-              context.loadData()
-              if(geoanalyticsOn){
-                getDistances(context, context.props.user.userId, responseData.response.map(item => item['userid']))
+              if(!context.state.geoanalyticsOn){
+                context.loadData()
               }
+              else{
+                DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/locate')
+                const userid = context.props.user.userId
+                const userids = context.state.data.response.map(item => item['userid'])
+
+                context.props.client.query({
+                  query: DistanceToUserQuery,
+                  variables: {userid: userid, userids: userids}
+                })
+                  .then(response => {
+                    const responseDist = response.data.distToUser
+                    context.setState({distancesToUser: responseDist})
+                  })
+                  .catch(err => console.log(err))
+              }
+
+
+              // getDistances(context, context.props.user.userId, context.state.data.response.map(item => item['userid']))
             })
             .catch(err => console.log(err))
         })
@@ -583,4 +600,4 @@ const cleanWords = (word) => {
 }
 
 
-export {htmlToText, filterSortMap, calcFrequency, relevancyRank, cleanWords, askQuestion, getDistances}
+export {htmlToText, filterSortMap, calcFrequency, relevancyRank, cleanWords, askQuestion}

@@ -1,9 +1,8 @@
 import React, {Component} from 'react'
 import { graphql, compose } from 'react-apollo'
 import {withRouter} from 'react-router-dom'
-import {filterSortMap, calcFrequency, cleanWords, askQuestion, getDistances} from './Utilities'
+import {filterSortMap, calcFrequency, cleanWords, askQuestion} from './Utilities'
 import {DefaultInterface} from '../../Utilities'
-import {QuestionMutation, AddNewQuestionMutation, AddNewTagsMutation} from './Queries'
 import {topUserTags, topTagsByTime, tagsByUserTime, topNewestTags, topCommunityTags} from './MetaAnalytics/Utilities'
 import Ask from './Ask'
 import {withApollo } from 'react-apollo'
@@ -34,7 +33,6 @@ class AskContainer extends Component{
   }
   componentDidMount = () => {
     this.setState({loaded: true})
-    console.log("PROPS",this.props)
   }
 
   onTextChange = (event) => {
@@ -42,6 +40,7 @@ class AskContainer extends Component{
   }
   loadData = () => {
     this.setState({analyticsLoaded: false, questionsLoaded: false})
+    DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
     topUserTags(this,10)
     topTagsByTime(this, 10)
     topCommunityTags(this, 10)
@@ -52,7 +51,6 @@ class AskContainer extends Component{
     if(this.state.question.length > 0){
       this.setState({lastQuestion: this.state.question})
       DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/ask')
-
       askQuestion(this, this.state.question, this.state.geoanalyticsOn, this.state.distancesToUser)
     }
   }
@@ -105,11 +103,4 @@ class AskContainer extends Component{
   }
 }
 
-const AskContainerComponent= compose(
-  withApollo,
-  graphql(QuestionMutation, {name: "QuestionMutation"}),
-  graphql(AddNewQuestionMutation, {name: "AddNewQuestionMutation"}),
-  graphql(AddNewTagsMutation, {name: "AddNewTagsMutation"})
-)(withRouter(AskContainer))
-
-export default AskContainerComponent
+export default withApollo(withRouter(AskContainer))

@@ -15,10 +15,6 @@ class AnalyticsContainer extends Component{
   state = {
     loaded: false,
   }
-  componentDidMount = () => {
-    DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
-
-  }
   render(){
     const userData = {
       topUserTags: this.props.data.topUserTags,

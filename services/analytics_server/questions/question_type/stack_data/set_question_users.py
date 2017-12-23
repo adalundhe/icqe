@@ -8,10 +8,11 @@ from cassandra.query import dict_factory, ordered_dict_factory
 import collections
 import uuid
 from operator import itemgetter
+from random import randint
 import os
 
 
-class CreateAddresses:
+class SetQuestions:
     def __init__(self):
         cluster = Cluster()
         self.session = cluster.connect('graphql')
@@ -35,26 +36,32 @@ class CreateAddresses:
 
             return data
 
-    def seed_address_db(self):
+    def seed_questions_db(self):
         CQLstring = "SELECT * FROM tag;"
         CQLUSERstring = "SELECT * FROM user;"
         tags = list(self.session.execute(CQLstring))
+        existing_users = [user['userid'].urn[9:] for user in list(self.session.execute(CQLUSERstring))]
 
-        unique_users = list(set([tag['userid'].urn[9:] for tag in tags]))
-        addresses = self.load_data_file()
+        unique_users = list(set([tag['userid'].urn[9:] for tag in tags if tag['userid'] not in existing_users]))
 
-        for i, address in enumerate(addresses):
-            address['userid'] = unique_users[i]
+        CQLQUESTIONstring = "SELECT * FROM question;"
 
-        return addresses
+        questions = list(self.session.execute(CQLQUESTIONstring))
+
+
+
+        for question in questions:
+            question['userid'] = unique_users[question['userid']]
+
+        return questions
 
     def insert_to_db(self):
-        addresses = self.seed_address_db()
+        questions = self.seed_questions_db()
 
-        for address in addresses:
-            address_id = uuid.uuid4()
-            CQLstring = "INSERT INTO address (addressid, userid, city, state, zip) VALUES ({}, {}, {}, {}, {});".format(address_id, address['userid'], self.encoder.cql_encode_all_types(address['city']), self.encoder.cql_encode_all_types(address['state']), self.encoder.cql_encode_all_types(address['zip']))
+        for question in questions:
+            CQLstring = "INSERT INTO question (userid) VALUES ({}) WHERE questionid = {};".format(question['userid'], question['questionid'])
             self.session.execute(CQLstring)
 
-addressSeeder = CreateAddresses()
-addressSeeder.insert_to_db()
+
+questionSeeder = SetQuestions()
+questionSeeder.insert_to_db()

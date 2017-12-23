@@ -40,8 +40,17 @@ const AddNewTagsMutation = gql`
   }
 `
 
+const DistanceToUserQuery = gql`
+  query distToUser($userid: ID!, $userids: [ID]!){
+    distToUser(userId: $userid, userIds: $userids){
+      userId
+      distanceFromUser
+    }
+  }
+`
+
 // const AddUser = gql`
 //   query
 // `
 
-export {QuestionMutation, AddNewQuestionMutation, AddNewTagsMutation}
+export {QuestionMutation, AddNewQuestionMutation, AddNewTagsMutation, DistanceToUserQuery}
