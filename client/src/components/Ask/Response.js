@@ -11,7 +11,7 @@ const Response = (props) => {
   return(
     <div style={containerStyle}>
       <Row style={rowStyle}>
-        <ResponseHeader body={props.body} analyticsSelect={props.analyticsSelect} index={props.index} />
+        <ResponseHeader body={props.body} linkto={props.linkto} analyticsSelect={props.analyticsSelect} index={props.index} />
         {
           props.geoanalyticsOn && props.distLen > 0 ?
           <DistanceBar distance={props.distance} />
