@@ -49,6 +49,7 @@ const topTagsByTime = (context, limit) => {
         return newData
       })
       context.setState({topTagsByTime: parsed_dates, analyticsLoaded: true})
+      relevantQuestions(context, data.map(item => item['body']), 'user')
     })
     .catch(err => console.log(err))
 }
