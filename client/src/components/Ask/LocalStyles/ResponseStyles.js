@@ -123,7 +123,7 @@ const textStyleTopThree = {
   width: '100%',
   margin: '0',
   fontWeight: '0.1',
-  marginLeft: '5.5em',
+  marginLeft: '0.5em',
   marginBottom: '0.75em',
 }
 
