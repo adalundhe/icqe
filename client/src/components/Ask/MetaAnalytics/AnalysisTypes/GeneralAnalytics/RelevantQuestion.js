@@ -13,7 +13,7 @@ const RelevantQuestion = (props) =>
   <Row style={rowStyle}>
     <Col md={6} style={colStyle}>
       <h3 style={textStyleTopTwo}>{props.body}</h3>
-      <p style={textStyleBottomTwo}><a style={linkStyle} href={props.linkto}>{props.linkto}</a></p>
+      <p style={textStyleBottomTwo}><a style={linkStyle} href={props.linkto} target="_blank">{props.linkto}</a></p>
     </Col>
     <Col md={6}  style={colStyleThree}>
       <Row>
