@@ -33,9 +33,11 @@ class DistanceMatrix:
 
     def strdist_to_floatdist(self, items):
         results = []
+        items = list(filter(lambda x: x['dist']['status'] == 'OK', items))
+
         for item in items:
             if item['dist']['status'] != 'NOT_FOUND':
-                item['dist'] = float(item['dist']['distance']['text'][0:len(item['dist']['distance']['text'])-2].replace(',','').strip(' ') + '.0')
+                item['dist'] = float(item['dist']['distance']['text'][0:len(item['dist']['distance']['text'])-2].replace(',','').strip(' '))
                 results.append(item)
         return results
 
@@ -61,11 +63,8 @@ class DistanceMatrix:
 
     def distFromUsertoUsers(self, user_id, user_ids):
         user_ids_unique = list(np.unique(np.asarray(user_ids)))
-        print("GO",user_ids_unique)
         user_address = self.urn_uuid(af.getAddressByUserId(user_id))
-        print("RETURNED", user_address)
         users_found = [self.urn_uuid(af.getAddressByUserId(u_id)) for u_id in user_ids_unique]
-        print("RETURNING",user_address, users_found)
         all_found = self.set_dist(user_address ,users_found)
 
         return sorted(all_found, key=lambda x: x['dist'])

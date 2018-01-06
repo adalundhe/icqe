@@ -44,7 +44,11 @@ const DistanceToUserQuery = gql`
   query distToUser($userid: ID!, $userids: [ID]!){
     distToUser(userId: $userid, userIds: $userids){
       userId
-      distanceFromUser
+      addressId
+      distance
+      city
+      state
+      zipCode
     }
   }
 `

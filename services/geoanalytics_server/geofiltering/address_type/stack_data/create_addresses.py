@@ -19,13 +19,16 @@ class CreateAddresses:
         self.encoder = Encoder()
         self.tokenizer = Tokenizer()
 
-    def load_data_file(self):
+    def load_data_file(self, limit):
         data = []
 
         with open('address_data.csv','r') as address_data:
             count = 0
             for line in address_data:
                 line = line.split(",")
+
+                if count >= limit:
+                    break
 
                 if count > 0:
                     line = [item.strip('"') for item in line]
@@ -36,12 +39,14 @@ class CreateAddresses:
             return data
 
     def seed_address_db(self):
-        CQLstring = "SELECT * FROM tag;"
+        CQLstring = "SELECT * FROM question;"
         CQLUSERstring = "SELECT * FROM user;"
-        tags = list(self.session.execute(CQLstring))
+        questions = list(self.session.execute(CQLstring))
 
-        unique_users = list(set([tag['userid'].urn[9:] for tag in tags]))
-        addresses = self.load_data_file()
+        unique_users = list(set([question['userid'].urn[9:] for question in questions]))
+        addresses = self.load_data_file(len(unique_users))
+
+        print("GOT",len(addresses))
 
         for i, address in enumerate(addresses):
             address['userid'] = unique_users[i]

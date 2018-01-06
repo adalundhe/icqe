@@ -34,7 +34,7 @@ const rowStyle = {
 }
 
 const colStyle = {
-  width: '50%',
+  width: '80%',
   margin: '0',
   textAlign: 'left',
 }
@@ -53,11 +53,22 @@ const colStyleThree = {
 }
 
 const colItem = {
-  width: '10%',
+  width: '20%',
   margin: '0',
 }
 
 const textStyleTop = {
+  color: 'rgba(0,0,0,0.6)',
+  textTransform: 'lowercase',
+  fontFamily: 'sans-serif',
+  fontSize: '1em',
+  width: '100%',
+  margin: '0',
+  fontWeight: '0.1',
+  marginBottom: '1.5em',
+}
+
+const textStyleTopBar = {
   color: 'rgba(0,0,0,0.6)',
   textTransform: 'lowercase',
   fontFamily: 'sans-serif',
@@ -66,6 +77,7 @@ const textStyleTop = {
   margin: '0',
   fontWeight: '0.1',
   marginBottom: '1.5em',
+  textAlign: 'center'
 }
 
 const textStyleBottom = {
@@ -128,8 +140,9 @@ const spanStyle = {
 }
 
 const barContainer = {
-  width: '259.18px',
+  width: '100%',
   textAlign: 'center',
+  margin: '0'
 }
 
 const relevanceBar = {
@@ -139,4 +152,4 @@ const relevanceBar = {
 
 export {containerStyle, rowStyle, colStyle, colStyleTwo, colItem, textStyleTop,
         textStyleBottom, textStyleTopTwo, textStyleBottomTwo, textStyleTopThree, colStyleThree,
-        linkStyle, spanStyle, barContainer, relevanceBar, containerStyleTwo}
+        linkStyle, spanStyle, barContainer, relevanceBar, containerStyleTwo, textStyleTopBar}

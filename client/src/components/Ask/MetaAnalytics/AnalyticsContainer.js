@@ -6,7 +6,6 @@ import {Switch} from 'react-router-dom'
 import {PrivateRoute} from '../../../Auth/PrivateRoute'
 import {UserUsage, CommunityUsage} from './AnalysisTypes'
 import {AnalyticsStyle} from '../LocalStyles/AnalyticsStyles'
-import {GeoserviceSelect} from './AnalysisTypes/Geolocation'
 import {AnalyticsSelect} from './AnalysisTypes/GeneralAnalytics'
 import {Row} from 'react-bootstrap'
 
@@ -37,7 +36,6 @@ class AnalyticsContainer extends Component{
         <Row style={AnalyticsStyle.showAnalyticsRow}>
           <div style={{display: "flex"}}>
             <AnalyticsSelect showAnalytics={this.props.showAnalytics} selectAnalytics={this.props.selectAnalytics}  />
-            <GeoserviceSelect showAnalytics={this.props.showAnalytics} selectGeoanalytics={this.props.selectGeoanalytics} geoanalyticsOn={this.props.geoanalyticsOn}/>
           </div>
         </Row>
         <Row>

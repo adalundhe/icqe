@@ -4,9 +4,12 @@ import {getDistances} from './MetaAnalytics/Utilities'
 
 const parser = new DOMParser();
 
+const sortAll = (data, sorting) => {
+  return data.filter(item => sorting.indexOf(item['userid']) > -1)
+}
+
 const askQuestion = (context, query) => {
   DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/ask')
-  console.log("DOING",context.props)
   context.props.client.mutate({
       mutation: QuestionMutation,
       variables: {query}
@@ -16,7 +19,13 @@ const askQuestion = (context, query) => {
       const responseData = response.data.submitQuestion
       responseData.response = filterSortMap(responseData.response)
       responseData.similarities = calcFrequency(filterSortMap(responseData.response, 'similarity'))
-      context.setState({data: responseData, showData: true, status: 'ready', question: ''})
+
+      if(!context.state.geoanalyticsOn){
+        context.setState({data: responseData, showData: true, status: 'ready', question: ''})
+      }
+      else{
+        context.setState({data: responseData, status: 'ready', question: ''})
+      }
 
       context.props.client.mutate({
           mutation: AddNewQuestionMutation,
@@ -45,13 +54,14 @@ const askQuestion = (context, query) => {
                 })
                   .then(response => {
                     const responseDist = response.data.distToUser
-                    context.setState({distancesToUser: responseDist})
+                    const data = context.state.data
+                    console.log("DATA",responseDist)
+                    data.response = sortAll(data.response, responseDist.map(item => item['userId']))
+
+                    context.setState({distancesToUser: responseDist, data: data, showData: true})
                   })
                   .catch(err => console.log(err))
               }
-
-
-              // getDistances(context, context.props.user.userId, context.state.data.response.map(item => item['userid']))
             })
             .catch(err => console.log(err))
         })

@@ -89,7 +89,9 @@ class AskContainer extends Component{
           <div>
             <Ask onTextChange={this.onTextChange} submitQuestion={this.submitQuestion} status={this.props.status}/>
             <div>
-            {this.state.showData ? <ResponseList {...this.state.data} analyticsSelect={this.analyticsSelect} />
+            {this.state.showData ? <ResponseList {...this.state.data} analyticsSelect={this.analyticsSelect}
+              geoanalyticsOn={this.state.geoanalyticsOn} distLen={this.state.distancesToUser.length}
+              distances={this.state.distancesToUser} />
               :
               null
             }
