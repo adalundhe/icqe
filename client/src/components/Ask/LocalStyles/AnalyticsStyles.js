@@ -42,7 +42,6 @@ const AnalyticsStyle = {
     fontFamily: 'sans-serif',
     textTransform: 'lowercase',
     fontSize: '0.8em',
-    cursor: 'pointer'
   },
   listingBlock: {
     color: 'rgba(0,0,0,0.5)'

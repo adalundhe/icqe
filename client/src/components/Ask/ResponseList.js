@@ -9,7 +9,9 @@ const ResponseList  = (props) =>
           item.similarities = props.similarities
           return(
             <div key={index}>
-              <Response {...item} analyticsSelect={props.analyticsSelect} />
+              <Response geoanalyticsOn={props.geoanalyticsOn} {...item} analyticsSelect={props.analyticsSelect}
+              distLen={props.distLen}
+              distance={props.geoanalyticsOn? props.distances[index] : 0} />
             </div>
             )
           }

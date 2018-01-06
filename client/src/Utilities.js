@@ -28,6 +28,9 @@ const ClientInterface = {
     this.networkInterface.setUri(uri)
     return this
   },
+  getClient(){
+    return this.networkInterface
+  },
   newClient(uri){
     this.networkInterface = new NetworkInterface(uri)
     this.client = new ApolloClient({

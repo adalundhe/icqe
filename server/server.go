@@ -31,6 +31,7 @@ func StartServer() {
   loginRoutes.HandleFunc("/graphiql", graphiql.ServeGraphiQL)
   loginRoutes.HandleFunc("/ask", proxy.ProxyQuestion)
   loginRoutes.HandleFunc("/meta", proxy.ProxyMeta)
+  loginRoutes.HandleFunc("/locate", proxy.ProxyGeoanalytics)
 
   r.HandleFunc("/", home.HomeHandler)
 	r.HandleFunc("/callback", callback.CallbackHandler)

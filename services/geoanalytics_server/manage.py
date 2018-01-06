@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 import os
 import sys
+import django
+from django.core.management.commands.runserver import Command as runserver
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geoanalytics_server.settings")
-    import django
     django.setup()
-    from django.core.management.commands.runserver import Command as runserver
     runserver.default_port = "9000"
 
     try:

@@ -1,21 +1,44 @@
 import {DefaultInterface} from '../../Utilities'
+import {QuestionMutation, AddNewQuestionMutation, AddNewTagsMutation, DistanceToUserQuery} from './Queries'
+import {getDistances} from './MetaAnalytics/Utilities'
 
 const parser = new DOMParser();
 
+const sortAll = (data, sorting) => {
+  return data.filter(item => sorting.indexOf(item['userid']) > -1)
+}
+
 const askQuestion = (context, query) => {
-  context.props.QuestionMutation({variables: {query}})
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/ask')
+  context.props.client.mutate({
+      mutation: QuestionMutation,
+      variables: {query}
+    })
     .then((response) => {
       DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/questionql')
-      const data = response.data.submitQuestion
-      data.response = filterSortMap(data.response)
-      data.similarities = calcFrequency(filterSortMap(data.response, 'similarity'))
-      context.setState({data: data, showData: true, status: 'ready', question: ''})
-      context.props.AddNewQuestionMutation({variables: {body: query, userid: context.props.user.userId, answerid: data.response[0].answerid}})
+      const responseData = response.data.submitQuestion
+      responseData.response = filterSortMap(responseData.response)
+      responseData.similarities = calcFrequency(filterSortMap(responseData.response, 'similarity'))
+
+      if(!context.state.geoanalyticsOn){
+        context.setState({data: responseData, showData: true, status: 'ready', question: ''})
+      }
+      else{
+        context.setState({data: responseData, status: 'ready', question: ''})
+      }
+
+      context.props.client.mutate({
+          mutation: AddNewQuestionMutation,
+          variables: {body: query, userid: context.props.user.userId, answerid: responseData.response[0].answerid}
+        })
         .then(response => {
           DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/tagql')
           const data = response.data.AddNewQuestion.Question
           const tags = cleanWords(data.Body).split(" ").filter(item => item !== "")
-          context.props.AddNewTagsMutation({variables: {tags: tags, questionid: data.QuestionId, userid: data.UserId}})
+          context.props.client.mutate({
+            mutation: AddNewTagsMutation,
+            variables: {tags: tags, questionid: data.QuestionId, userid: data.UserId}
+          })
             .then(response => {
               context.loadData()
             })

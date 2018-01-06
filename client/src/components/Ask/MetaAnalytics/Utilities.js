@@ -2,6 +2,20 @@ import {topUserTagsQuery, topTagsByTimeQuery, tagsByUserTimeQuery, topNewestTags
 import {QuestionMutation} from '../Queries'
 import {filterSortMap, calcFrequency} from '../Utilities'
 import {DefaultInterface} from '../../../Utilities'
+import {distanceToUserQuery} from './AnalysisTypes/Geolocation/Queries'
+
+
+const getDistances = (context, userId, userIds) => {
+  console.log("LAUNCH!")
+  context.props.client.query({
+    query: distanceToUserQuery,
+    variables: {userid: userId, userids: userIds}
+  })
+    .then(response => {
+      console.log(response)
+    })
+    .catch(err => console.log(err))
+}
 
 const topUserTags = (context, limit) => {
   DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
@@ -14,7 +28,6 @@ const topUserTags = (context, limit) => {
       const data = response.data.topUserTags
       const range = response.data.topUserTags[0]['count']
       context.setState({topUserTags: data, userRange: range})
-      relevantQuestions(context, data.map(item => item['body']), 'user')
     })
     .catch(err => console.log(err))
 }
@@ -54,7 +67,6 @@ const tagsByUserTime = (context, query, limit) => {
 
 const topNewestTags = (context, limit) => {
   DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
-  // WARNING: This is an expensive query
   context.props.client.query({
     query: topNewestTagsQuery,
     variables: {limit}
@@ -72,6 +84,7 @@ const topNewestTags = (context, limit) => {
 }
 
 const relevantQuestions = (context, querySequence, type) => {
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   const query = querySequence.join(" ")
   context.props.client.mutate({
     mutation: QuestionMutation,
@@ -108,4 +121,4 @@ const topCommunityTags = (context, limit) => {
 }
 
 
-export {topUserTags, topTagsByTime, relevantQuestions, tagsByUserTime, topNewestTags, topCommunityTags}
+export {topUserTags, topTagsByTime, relevantQuestions, tagsByUserTime, topNewestTags, topCommunityTags, getDistances}

@@ -3,7 +3,6 @@ import { graphql, compose } from 'react-apollo'
 import {withRouter} from 'react-router-dom'
 import {filterSortMap, calcFrequency, cleanWords, askQuestion} from './Utilities'
 import {DefaultInterface} from '../../Utilities'
-import {QuestionMutation, AddNewQuestionMutation, AddNewTagsMutation} from './Queries'
 import {topUserTags, topTagsByTime, tagsByUserTime, topNewestTags, topCommunityTags} from './MetaAnalytics/Utilities'
 import Ask from './Ask'
 import {withApollo } from 'react-apollo'
@@ -29,6 +28,8 @@ class AskContainer extends Component{
     userRange: 0,
     communityRange: 0,
     showAnalytics: false,
+    geoanalyticsOn: false,
+    distancesToUser: []
   }
   componentDidMount = () => {
     this.setState({loaded: true})
@@ -49,7 +50,7 @@ class AskContainer extends Component{
     if(this.state.question.length > 0){
       this.setState({lastQuestion: this.state.question})
       DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/ask')
-      askQuestion(this, this.state.question)
+      askQuestion(this, this.state.question, this.state.geoanalyticsOn, this.state.distancesToUser)
     }
   }
   analyticsSelect = (index) => {
@@ -60,6 +61,9 @@ class AskContainer extends Component{
   selectAnalytics = () => {
     this.loadData()
     this.props.setVisibility(false)
+  }
+  selectGeoanalytics = () => {
+    this.setState({geoanalyticsOn: !this.state.geoanalyticsOn})
   }
   render(){
     const data = {
@@ -77,13 +81,16 @@ class AskContainer extends Component{
     return(
       <div>
         <AnalyticsContainer user={this.props.user} selectAnalytics={this.selectAnalytics}
-        loadData={this.loadData} showAnalytics={this.props.showAnalytics} selectAnalytics={this.selectAnalytics} data={data} />
+        loadData={this.loadData} showAnalytics={this.props.showAnalytics} geoanalyticsOn={this.state.geoanalyticsOn}
+        selectAnalytics={this.selectAnalytics} selectGeoanalytics={this.selectGeoanalytics} data={data} />
         {
           this.props.showAsk ?
           <div>
             <Ask onTextChange={this.onTextChange} submitQuestion={this.submitQuestion} status={this.props.status}/>
             <div>
-            {this.state.showData ? <ResponseList {...this.state.data} analyticsSelect={this.analyticsSelect} />
+            {this.state.showData ? <ResponseList {...this.state.data} analyticsSelect={this.analyticsSelect}
+              geoanalyticsOn={this.state.geoanalyticsOn} distLen={this.state.distancesToUser.length}
+              distances={this.state.distancesToUser} />
               :
               null
             }
@@ -97,11 +104,4 @@ class AskContainer extends Component{
   }
 }
 
-const AskContainerComponent= compose(
-  withApollo,
-  graphql(QuestionMutation, {name: "QuestionMutation"}),
-  graphql(AddNewQuestionMutation, {name: "AddNewQuestionMutation"}),
-  graphql(AddNewTagsMutation, {name: "AddNewTagsMutation"})
-)(withRouter(AskContainer))
-
-export default AskContainerComponent
+export default withApollo(withRouter(AskContainer))

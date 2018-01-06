@@ -54,4 +54,32 @@ const selectColorByGT = (similarity) => {
 
 }
 
-export {selectColorByEQ, selectColorByGT}
+const inverseColorByDistLT = (distance) => {
+  if(distance <= 5){
+      return '#2C3E50'
+  }
+  else if(distance <= 10){
+    return '#34495E'
+  }
+  else if (distance <= 25) {
+      return '#336E7B'
+  }
+  else if (distance <= 50) {
+    return '#3498DB'
+  }
+  else if (distance <= 100) {
+    return '#59ABE3'
+  }
+  else if (distance <= 250) {
+    return '#89C4F4'
+  }
+  else if (distance <= 500) {
+    return '#ADC6F1'
+  }
+  else{
+    return '#A3CAF8'
+  }
+
+}
+
+export {selectColorByEQ, selectColorByGT, inverseColorByDistLT}

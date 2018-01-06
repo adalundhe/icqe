@@ -2,20 +2,17 @@ import React, {Component} from 'react'
 import {TransitionComponent} from '../../Helpers/TransitionHoc'
 import {DefaultInterface} from '../../../Utilities'
 import NavBar from './AnalyticsNavigation/NavBarContainer'
-import {Switch, Link} from 'react-router-dom'
+import {Switch} from 'react-router-dom'
 import {PrivateRoute} from '../../../Auth/PrivateRoute'
 import {UserUsage, CommunityUsage} from './AnalysisTypes'
 import {AnalyticsStyle} from '../LocalStyles/AnalyticsStyles'
-import {Icon} from 'react-fa'
-import {Col, Row} from 'react-bootstrap'
+import {AnalyticsSelect} from './AnalysisTypes/GeneralAnalytics'
+import {Row} from 'react-bootstrap'
+
 
 class AnalyticsContainer extends Component{
   state = {
     loaded: false,
-  }
-  componentDidMount = () => {
-    DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
-
   }
   render(){
     const userData = {
@@ -37,26 +34,9 @@ class AnalyticsContainer extends Component{
     return(
       <div style={AnalyticsStyle.container}>
         <Row style={AnalyticsStyle.showAnalyticsRow}>
-          <Col md={1} onClick={() => this.props.selectAnalytics()}>
-          {
-            this.props.showAnalytics ?
-            <Link to="/ask" style={{textDecoration: 'none', color: 'rgba(0,0,0,0.5)'}}>
-              <Icon name="gear" style={{marginRight: '1em'}} />
-              {
-                'Collapse analytics'
-              }
-            </Link>
-            :
-            <Link to="/ask/my-usage" style={{textDecoration: 'none', color: 'rgba(0,0,0,0.5)'}}>
-              <Icon name="gear" style={{marginRight: '1em'}} />
-              {
-                'View analytics'
-              }
-            </Link>
-          }
-          </Col>
-          <Col md={11}>
-          </Col>
+          <div style={{display: "flex"}}>
+            <AnalyticsSelect showAnalytics={this.props.showAnalytics} selectAnalytics={this.props.selectAnalytics}  />
+          </div>
         </Row>
         <Row>
         {
