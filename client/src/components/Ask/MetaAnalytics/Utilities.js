@@ -18,6 +18,7 @@ const getDistances = (context, userId, userIds) => {
 }
 
 const topUserTags = (context, limit) => {
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   const userId = context.props.user.userId
   context.props.client.query({
     query: topUserTagsQuery,
@@ -32,6 +33,7 @@ const topUserTags = (context, limit) => {
 }
 
 const topTagsByTime = (context, limit) => {
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   const userId = context.props.user.userId
 
   context.props.client.query({
@@ -52,6 +54,7 @@ const topTagsByTime = (context, limit) => {
 }
 
 const tagsByUserTime = (context, query, limit) => {
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   context.props.client.query({
     query: tagsByUserTimeQuery,
     variables: {query, userid: context.props.user.userId, limit: limit}
@@ -63,6 +66,7 @@ const tagsByUserTime = (context, query, limit) => {
 }
 
 const topNewestTags = (context, limit) => {
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   context.props.client.query({
     query: topNewestTagsQuery,
     variables: {limit}
@@ -80,6 +84,7 @@ const topNewestTags = (context, limit) => {
 }
 
 const relevantQuestions = (context, querySequence, type) => {
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   const query = querySequence.join(" ")
   context.props.client.mutate({
     mutation: QuestionMutation,
@@ -101,6 +106,7 @@ const relevantQuestions = (context, querySequence, type) => {
 }
 
 const topCommunityTags = (context, limit) => {
+  DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
   context.props.client.query({
     query: topCommunityTagsQuery,
     variables: {limit}

@@ -40,7 +40,6 @@ class AskContainer extends Component{
   }
   loadData = () => {
     this.setState({analyticsLoaded: false, questionsLoaded: false})
-    DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/meta')
     topUserTags(this,10)
     topTagsByTime(this, 10)
     topCommunityTags(this, 10)

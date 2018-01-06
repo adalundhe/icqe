@@ -40,28 +40,7 @@ const askQuestion = (context, query) => {
             variables: {tags: tags, questionid: data.QuestionId, userid: data.UserId}
           })
             .then(response => {
-              if(!context.state.geoanalyticsOn){
-                context.loadData()
-              }
-              else{
-                DefaultInterface.setInterface('http://'+process.env.REACT_APP_API+'/user-profile/locate')
-                const userid = context.props.user.userId
-                const userids = context.state.data.response.map(item => item['userid'])
-
-                context.props.client.query({
-                  query: DistanceToUserQuery,
-                  variables: {userid: userid, userids: userids}
-                })
-                  .then(response => {
-                    const responseDist = response.data.distToUser
-                    const data = context.state.data
-                    console.log("DATA",responseDist)
-                    data.response = sortAll(data.response, responseDist.map(item => item['userId']))
-
-                    context.setState({distancesToUser: responseDist, data: data, showData: true})
-                  })
-                  .catch(err => console.log(err))
-              }
+              context.loadData()
             })
             .catch(err => console.log(err))
         })
