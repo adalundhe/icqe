@@ -12,7 +12,7 @@ const ResponseHeader = (props) =>
     </Col>
     <Col md={6} style={colStyle}>
       <h3 style={textStyleTop}>{props.body}</h3>
-      <p style={textStyleBottom}><a style={linkStyle} href={props.linkto}>{props.linkto}</a></p>
+      <p style={textStyleBottom}><a style={linkStyle} href={props.linkto} target="_blank">{props.linkto}</a></p>
     </Col>
   </div>
 
